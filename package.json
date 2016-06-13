@@ -100,6 +100,8 @@
     "webpack-hot-middleware": "^2.10.0"
   },
   "dependencies": {
+    "axios": "^0.12.0",
+    "bootstrap": "^3.3.6",
     "css-modules-require-hook": "^4.0.0",
     "electron-debug": "^1.0.0",
     "font-awesome": "^4.6.3",
@@ -109,7 +111,9 @@
     "react-redux": "^4.4.5",
     "react-router": "^2.4.1",
     "react-router-redux": "^4.0.4",
+    "react-timer-mixin": "^0.13.3",
     "redux": "^3.5.2",
+    "redux-form": "^5.2.5",
     "redux-thunk": "^2.1.0",
     "source-map-support": "^0.4.0"
   },

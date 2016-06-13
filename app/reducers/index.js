@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
 import { routerReducer as routing } from 'react-router-redux';
-import counter from './counter';
+import { reducer as form } from 'redux-form';
+import authReducer from './auth_reducer';
 
 const rootReducer = combineReducers({
-  counter,
-  routing
+  routing,
+  form,  // form: form - ES6
+  auth: authReducer
 });
 
 export default rootReducer;
