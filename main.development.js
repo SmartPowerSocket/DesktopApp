@@ -1,4 +1,8 @@
 import { app, BrowserWindow, Menu, shell } from 'electron';
+import "./particle/app";
+
+
+global.particleEnhancement.quitApp = app.quit;
 
 let menu;
 let template;

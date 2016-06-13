@@ -236,7 +236,7 @@ WirelessCommand.prototype.__networks = function networks(err, dat) {
 		}], monitorChoice);
 		*/
 		/* Enhancement point */
-		GLOBAL.particleEnhancement.couldNotFindAPhoton(monitorChoice);
+		monitorChoice({monitor: true});
 	}
 
 	function manualChoice(ans) {
@@ -336,18 +336,17 @@ WirelessCommand.prototype.monitor = function(args) {
 
 	var self = this;
 
+	/* Enhancement point */
+	global.particleEnhancement.stopPhotonWifiMonitoring = function() {
+		self.exit();
+		self.stopSpin();
+		clearTimeout(wildPhotons);
+		return;
+	}
+
 	this.newSpin('%s ' + chalk.bold.white('Waiting for a wild Photon to appear... ') + chalk.white('(press ctrl + C to exit)')).start();
 	wildPhotons();
 	function wildPhotons() {
-
-		/* Enhancement point */
-		if (GLOBAL.particleEnhancement.stopWifiMonitoring) {
-				GLOBAL.particleEnhancement.stopWifiMonitoring = false;
-				 self.exit();
-			 	self.stopSpin();
-			 	clearTimeout(wildPhotons);
-			 	return;
-		}
 
 		scan(function (err, dat) {
 			if (!dat) {
@@ -446,7 +445,7 @@ WirelessCommand.prototype.setup = function setup(photon, cb) {
 			protip('We need an active internet connection to successfully complete setup.');
 			protip('Are you currently connected to the internet? Please double-check and try again.');
 			/* Enhancement point */
-			GLOBAL.particleEnhancement.setupFail('Connect your computer to a wifi spot with internet!');
+			global.particleEnhancement.setupFail('Connect your computer to a wifi spot with internet!');
 			return;
 		}
 
@@ -667,7 +666,7 @@ WirelessCommand.prototype.__configure = function __configure(ssid, cb) {
 
 		}], __networkChoice);*/
 
-		GLOBAL.particleEnhancement.choosePhotonNetwork(list, __networkChoice);
+		global.particleEnhancement.choosePhotonNetwork(list, __networkChoice);
 
 		function __networkChoice(ans) {
 
@@ -684,6 +683,7 @@ WirelessCommand.prototype.__configure = function __configure(ssid, cb) {
 			}
 
 			network = ans.network;
+			password = ans.password; /* Enhancement point */
 
 			if (list[network].sec === 0) {
 				return networkChoices({ network: network });
@@ -699,7 +699,7 @@ WirelessCommand.prototype.__configure = function __configure(ssid, cb) {
 
 			}], __passwordChoice);
 			*/
-			__passwordChoice({password: GLOBAL.particleEnhancement.wifiPassword});
+			__passwordChoice({password: password});
 		}
 		function __passwordChoice(ans) {
 
@@ -971,15 +971,19 @@ WirelessCommand.prototype.__configure = function __configure(ssid, cb) {
 
 		}], recheck);
 		*/
-		GLOBAL.particleEnhancement.wifiValidationFailed(recheck);
+		global.particleEnhancement.wifiValidationFailed(recheck);
 
 		function recheck(ans) {
 			if (ans.recheck === 'recheck') {
 
 				api.listDevices(checkDevices);
 			} else {
+				/* Enhancement point */
+				self.exit();
+				self.stopSpin();
+				return;
 
-				self.setup(self.__ssid);
+				// self.setup(self.__ssid);
 			}
 		}
 	};
@@ -992,13 +996,13 @@ WirelessCommand.prototype.__configure = function __configure(ssid, cb) {
 				message: 'What would you like to call your photon?'
 			}
 		], function(ans) {*/
-			var deviceName = GLOBAL.particleEnhancement.deviceName;
+			var deviceName = global.particleEnhancement.deviceName;
 			self.__oldapi.renameDevice(deviceId, deviceName).then(function () {
 				console.log();
 				console.log(arrow, 'Your Photon has been bestowed with the name', chalk.bold.cyan(deviceName));
 				console.log(arrow, "Congratulations! You've just won the internet!");
 				console.log();
-				GLOBAL.particleEnhancement.flashFirmware();
+				global.particleEnhancement.flashFirmware();
 				//self.exit();
 			}, function(err) {
 				console.error(alert, 'Error naming your photon: ', err);

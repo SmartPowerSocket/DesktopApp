@@ -27,30 +27,32 @@ class SetupWifi extends Component {
   }
 
   componentWillMount() {
-    remote.getGlobal('sharedObj').particleSetup();
+    remote.getGlobal('particleEnhancement').setup();
 
     let timeoutIsSet = false;
     TimerMixin.setInterval(() => {
-      if (remote.getGlobal('sharedObj').photonSetupFailed) {
+      if (remote.getGlobal('particleEnhancement').photonSetupFailed) {
         this.context.router.push('/failedSetup');
-      } else if (remote.getGlobal('sharedObj').photonSetupSuccess) {
+      } else if (remote.getGlobal('particleEnhancement').photonSetupSuccess) {
         this.props.activateDevice();
-      } else if (remote.getGlobal('sharedObj').photonNetworkList &&
-        remote.getGlobal('sharedObj').photonNetworkList.length > 0 &&
-        !this.state.networks) {
+      } else if (remote.getGlobal('particleEnhancement').photonNetworkList &&
+                 remote.getGlobal('particleEnhancement').photonNetworkList.length > 0 &&
+                 !this.state.networks) {
         this.setState({
-          networks: remote.getGlobal('sharedObj').photonNetworkList
+          networks: remote.getGlobal('particleEnhancement').photonNetworkList
         });
       } else if (!timeoutIsSet) {
         timeoutIsSet = true;
         TimerMixin.setTimeout(
           () => {
-            remote.getGlobal('sharedObj').stopPhotonWifiMonitoring();
-            remote.getGlobal('sharedObj').photonSetupFailed = 'Setup timeout,' +
-            ' could not find a Smart Power Socket!';
-            this.context.router.push('/failedSetup');
+            if (!remote.getGlobal('particleEnhancement').photonNetworkList) {
+              remote.getGlobal('particleEnhancement').stopPhotonWifiMonitoring();
+              remote.getGlobal('particleEnhancement').photonSetupFailed = 'Setup timeout,' +
+                ' could not find a Smart Power Socket!';
+              this.context.router.push('/failedSetup');
+            }
           },
-          (1000 * 60 * 2) // Wait for 2 minute
+          (1000 * 60 * 1) // Wait for 1 minute
         );
       }
     }, 1000); // Wait 1 second
@@ -68,7 +70,7 @@ class SetupWifi extends Component {
   }
 
   connectToNetwork() {
-    remote.getGlobal('sharedObj').setPhotonNetwork(this.state.selectedNetwork,
+    remote.getGlobal('particleEnhancement').setPhotonNetwork(this.state.selectedNetwork,
       this.state.networkPassword);
     this.setState({
       connectLabel: 'Connecting',

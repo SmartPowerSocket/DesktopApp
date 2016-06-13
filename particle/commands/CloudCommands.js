@@ -349,7 +349,7 @@ CloudCommand.prototype = extend(BaseCommand.prototype, {
 			if (resp.status || resp.message) {
 				console.log('Flash device OK: ', resp.status || resp.message);
 				/* Enhancement point */
-				GLOBAL.particleEnhancement.firmwareSetupDone();
+				global.particleEnhancement.firmwareSetupDone();
 				return when.resolve();
 			} else if (resp.errors) {
 				var errors = resp.errors.map(function(err) {

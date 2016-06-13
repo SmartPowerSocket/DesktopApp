@@ -15,12 +15,12 @@ class FailedSetup extends Component {
 
   componentWillMount() {
     this.setState({
-      errorMessage: remote.getGlobal('sharedObj').photonSetupFailed
+      errorMessage: remote.getGlobal('particleEnhancement').photonSetupFailed
     });
 
-    remote.getGlobal('sharedObj').photonSetupFailed = null;
-    remote.getGlobal('sharedObj').photonSetupSuccess = null;
-    remote.getGlobal('sharedObj').photonNetworkList = null;
+    remote.getGlobal('particleEnhancement').photonSetupFailed = null;
+    remote.getGlobal('particleEnhancement').photonSetupSuccess = null;
+    remote.getGlobal('particleEnhancement').photonNetworkList = null;
   }
 
   render() {

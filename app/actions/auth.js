@@ -6,7 +6,7 @@ export const UNAUTH_USER = 'unauth_user';
 export const AUTH_ERROR = 'auth_error';
 export const FETCH_MESSAGE = 'fetch_message';
 
-const ROOT_URL = 'http://localhost:3090';
+const ROOT_URL = 'http://492e0481.ngrok.io';
 
 export function signoutUser() {
   localStorage.removeItem('token');

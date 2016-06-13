@@ -33,19 +33,20 @@ var updateCheck = require('./lib/update-check');
 var Interpreter = require('./lib/interpreter.js');
 var cli = null;
 
-GLOBAL.particleEnhancement = {};
+global.particleEnhancement = {};
+
+global.particleEnhancement.photonSetupFailed = null;
+global.particleEnhancement.photonSetupSuccess = null;
+global.particleEnhancement.photonNetworkList = null;
+global.particleEnhancement.setPhotonNetwork = null;
 
 // TODO: Do photon authentication remotly
-GLOBAL.particleEnhancement.username = '';
-GLOBAL.particleEnhancement.password = '';
-GLOBAL.particleEnhancement.deviceName = 'powersocket';
+global.particleEnhancement.username = '';
+global.particleEnhancement.password = '';
+global.particleEnhancement.deviceName = 'powersocket';
 
-GLOBAL.particleEnhancement.couldNotFindAPhoton = function(monitorChoice) {
-	// Monitoring the network for photons
-	monitorChoice({monitor: true});
-};
 
-GLOBAL.particleEnhancement.choosePhotonNetwork = function (networksDetails, __networkChoice) {
+global.particleEnhancement.choosePhotonNetwork = function (networksDetails, __networkChoice) {
 	var networks = [];
 	for (var key in networksDetails) {
 		if (key === 'length' || !networksDetails.hasOwnProperty(key)) {
@@ -54,23 +55,36 @@ GLOBAL.particleEnhancement.choosePhotonNetwork = function (networksDetails, __ne
 		networks.push(networksDetails[key].ssid);
 	}
 
-	GLOBAL.particleEnhancement.getNetworkList(networks, __networkChoice);
+	global.particleEnhancement.photonNetworkList = networks;
+
+	global.particleEnhancement.setPhotonNetwork = function (selectedNetwork, networkPassword) {
+		__networkChoice({network: selectedNetwork, password: networkPassword});
+	};
 
 };
 
-GLOBAL.particleEnhancement.flashFirmware = function() {
+global.particleEnhancement.wifiValidationFailed = function(recheck) {
+	global.particleEnhancement.photonSetupFailed = "The provided wifi password is invalid!";
+	recheck({recheck: false});
+}
+
+global.particleEnhancement.firmwareSetupDone = function() {
+	global.particleEnhancement.photonSetupSuccess = true;
+}
+
+global.particleEnhancement.flashFirmware = function() {
 	var firmwarePath = path.join(__dirname, 'firmware', 'setup.ino');
 
 	// Flash Photon with initial firmware
 	cli.handle(['node',
-							'app.js',
-							'flash',
-							GLOBAL.particleEnhancement.deviceName,
-							firmwarePath
-						], false);
+				'app.js',
+				'flash',
+				global.particleEnhancement.deviceName,
+				firmwarePath
+			], false);
 };
 
-GLOBAL.particleEnhancement.setup = function() {
+global.particleEnhancement.setup = function() {
 
 	updateCheck(function () {
 		cli = new Interpreter();
@@ -78,8 +92,8 @@ GLOBAL.particleEnhancement.setup = function() {
 		cli.startup();
 		// Setup Photon Wifi and authentication
 		cli.handle(['node',
-								'app.js',
-								'setup'], true);
+					'app.js',
+					'setup'], true);
 	});
 
 };
