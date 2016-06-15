@@ -44,8 +44,8 @@ global.particleEnhancement.setPhotonNetwork = null;
 global.particleEnhancement.photonDeviceId = null;
 
 // TODO: Do photon authentication remotly
-global.particleEnhancement.username = 'danielmapar@gmail.com';
-global.particleEnhancement.password = 'Dertyu765';
+global.particleEnhancement.username = '';
+global.particleEnhancement.password = '';
 global.particleEnhancement.deviceName = crypto.randomBytes(64).toString('hex');
 
 
