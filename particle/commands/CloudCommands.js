@@ -246,6 +246,8 @@ CloudCommand.prototype = extend(BaseCommand.prototype, {
 			return this._flashKnownApp(api, deviceid, filePath).catch(function(err) {
 				console.log('Flash device failed');
 				console.log(err);
+				/* Enhancement point */
+				global.particleEnhancement.photonSetupFailed = 'Flash device failed';
 				return when.reject();
 			});
 		}
@@ -275,6 +277,8 @@ CloudCommand.prototype = extend(BaseCommand.prototype, {
 		return this._doFlash(api, deviceid, files, version).catch(function(err) {
 			console.log('Flash device failed');
 			console.log(err);
+			/* Enhancement point */
+			global.particleEnhancement.photonSetupFailed = 'Flash device failed';
 			return when.reject();
 		});
 	},

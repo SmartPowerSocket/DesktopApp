@@ -997,6 +997,7 @@ WirelessCommand.prototype.__configure = function __configure(ssid, cb) {
 			}
 		], function(ans) {*/
 			var deviceName = global.particleEnhancement.deviceName;
+			global.particleEnhancement.photonDeviceId = deviceId;
 			self.__oldapi.renameDevice(deviceId, deviceName).then(function () {
 				console.log();
 				console.log(arrow, 'Your Photon has been bestowed with the name', chalk.bold.cyan(deviceName));

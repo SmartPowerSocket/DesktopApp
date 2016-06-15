@@ -31,6 +31,8 @@ console.log('Particle Setup is included!');
 var path = require('path');
 var updateCheck = require('./lib/update-check');
 var Interpreter = require('./lib/interpreter.js');
+var crypto = require('crypto');
+
 var cli = null;
 
 global.particleEnhancement = {};
@@ -39,11 +41,12 @@ global.particleEnhancement.photonSetupFailed = null;
 global.particleEnhancement.photonSetupSuccess = null;
 global.particleEnhancement.photonNetworkList = null;
 global.particleEnhancement.setPhotonNetwork = null;
+global.particleEnhancement.photonDeviceId = null;
 
 // TODO: Do photon authentication remotly
-global.particleEnhancement.username = '';
-global.particleEnhancement.password = '';
-global.particleEnhancement.deviceName = 'powersocket';
+global.particleEnhancement.username = 'danielmapar@gmail.com';
+global.particleEnhancement.password = 'Dertyu765';
+global.particleEnhancement.deviceName = crypto.randomBytes(64).toString('hex');
 
 
 global.particleEnhancement.choosePhotonNetwork = function (networksDetails, __networkChoice) {
@@ -69,6 +72,7 @@ global.particleEnhancement.wifiValidationFailed = function(recheck) {
 }
 
 global.particleEnhancement.firmwareSetupDone = function() {
+
 	global.particleEnhancement.photonSetupSuccess = true;
 }
 

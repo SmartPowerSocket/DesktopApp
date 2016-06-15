@@ -6,7 +6,7 @@ export const UNAUTH_USER = 'unauth_user';
 export const AUTH_ERROR = 'auth_error';
 export const FETCH_MESSAGE = 'fetch_message';
 
-const ROOT_URL = 'http://492e0481.ngrok.io';
+const ROOT_URL = 'https://e023e096.ngrok.io';
 
 export function signoutUser() {
   localStorage.removeItem('token');
@@ -36,35 +36,6 @@ export function signinUser({ email, password }) {
         // - Show an error to the user
         dispatch(authError('Bad login info'));
       });
-  };
-}
-
-export function activateDevice(deviceId) {
-  return function(dispatch) {
-    axios.post(`${ROOT_URL}/registerDevice`, {
-      headers: { authorization: localStorage.getItem('token') },
-      deviceId
-    }).then(response => {
-      dispatch({
-        type: FETCH_MESSAGE,
-        payload: response.data.message
-      });
-
-      hashHistory.push('/successfulSetup');
-    });
-  };
-}
-
-export function fetchMessage() {
-  return function(dispatch) {
-    axios.get(`${ROOT_URL}/`, {
-      headers: { authorization: localStorage.getItem('token') }
-    }).then(response => {
-      dispatch({
-        type: FETCH_MESSAGE,
-        payload: response.data.message
-      });
-    });
   };
 }
 

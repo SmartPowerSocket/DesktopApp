@@ -3,7 +3,24 @@ import { connect } from 'react-redux';
 import { remote } from 'electron';
 import styles from './SetupWifi.css';
 import TimerMixin from 'react-timer-mixin';
-import * as actions from '../actions/auth';
+import * as authActions from '../actions/auth';
+import * as deviceActions from '../actions/device';
+
+function collect() {
+  let ret = {};
+  let len = arguments.length;
+  for (let i=0; i<len; i++) {
+    for (let p in arguments[i]) {
+      if (arguments[i].hasOwnProperty(p)) {
+        ret[p] = arguments[i][p];
+      }
+    }
+  }
+  return ret;
+}
+
+let actions = collect(authActions, deviceActions);
+let interval = null;
 
 class SetupWifi extends Component {
   static contextTypes = {
@@ -11,7 +28,7 @@ class SetupWifi extends Component {
   };
 
   static propTypes = {
-    activateDevice: PropTypes.func.isRequired
+    claimDevice: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -25,16 +42,19 @@ class SetupWifi extends Component {
       connectLabel: 'Connect'
     };
   }
+  componentWillUnmount() {
+    TimerMixin.clearInterval(interval);
+  }
 
   componentWillMount() {
     remote.getGlobal('particleEnhancement').setup();
 
     let timeoutIsSet = false;
-    TimerMixin.setInterval(() => {
+    interval = TimerMixin.setInterval(() => {
       if (remote.getGlobal('particleEnhancement').photonSetupFailed) {
         this.context.router.push('/failedSetup');
       } else if (remote.getGlobal('particleEnhancement').photonSetupSuccess) {
-        this.props.activateDevice();
+        this.props.claimDevice(remote.getGlobal('particleEnhancement').photonDeviceId, remote.getGlobal('particleEnhancement').deviceName);
       } else if (remote.getGlobal('particleEnhancement').photonNetworkList &&
                  remote.getGlobal('particleEnhancement').photonNetworkList.length > 0 &&
                  !this.state.networks) {
@@ -52,7 +72,7 @@ class SetupWifi extends Component {
               this.context.router.push('/failedSetup');
             }
           },
-          (1000 * 60 * 1) // Wait for 1 minute
+          (1000 * 60 * 2) // Wait for 2 minutes
         );
       }
     }, 1000); // Wait 1 second
