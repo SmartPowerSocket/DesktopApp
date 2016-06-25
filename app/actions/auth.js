@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { hashHistory } from 'react-router';
+import { remote } from 'electron';
+import { ROOT_URL } from './types';
 
 export const AUTH_USER = 'auth_user';
 export const UNAUTH_USER = 'unauth_user';
 export const AUTH_ERROR = 'auth_error';
 export const FETCH_MESSAGE = 'fetch_message';
-
-const ROOT_URL = 'https://e023e096.ngrok.io';
 
 export function signoutUser() {
   localStorage.removeItem('token');
@@ -27,7 +27,8 @@ export function signinUser({ email, password }) {
         dispatch({ type: AUTH_USER });
         // - Save the JWT token
         localStorage.setItem('token', response.data.token);
-        // - redirect to the route '/feature'
+        
+        remote.getGlobal('particleEnhancement').photonApiKey = response.data.apiKey;
 
         hashHistory.push('/setupInstructions');
       })

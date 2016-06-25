@@ -52,8 +52,10 @@ class SetupWifi extends Component {
     let timeoutIsSet = false;
     interval = TimerMixin.setInterval(() => {
       if (remote.getGlobal('particleEnhancement').photonSetupFailed) {
+        TimerMixin.clearInterval(interval);
         this.context.router.push('/failedSetup');
       } else if (remote.getGlobal('particleEnhancement').photonSetupSuccess) {
+        TimerMixin.clearInterval(interval);
         this.props.claimDevice(remote.getGlobal('particleEnhancement').photonDeviceId, remote.getGlobal('particleEnhancement').deviceName);
       } else if (remote.getGlobal('particleEnhancement').photonNetworkList &&
                  remote.getGlobal('particleEnhancement').photonNetworkList.length > 0 &&
@@ -66,6 +68,7 @@ class SetupWifi extends Component {
         TimerMixin.setTimeout(
           () => {
             if (!remote.getGlobal('particleEnhancement').photonNetworkList) {
+              TimerMixin.clearInterval(interval);
               remote.getGlobal('particleEnhancement').stopPhotonWifiMonitoring();
               remote.getGlobal('particleEnhancement').photonSetupFailed = 'Setup timeout,' +
                 ' could not find a Smart Power Socket!';

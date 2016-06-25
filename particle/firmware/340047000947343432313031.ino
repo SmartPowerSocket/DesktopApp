@@ -60,8 +60,8 @@ void loop() {
         Particle.connect();
     }
     // Get some data
-    String jsonSendSocketInformation = String( "{ \"current\":" + String(random(300)) + ",\"tension\":" + String(random(300)) + ",\"apiKey\": \"" + String("{{{apiKey}}}") + "\"}");
-    String jsonGetServerInformation = String( "{ \"apiKey\": \"" + String("{{{apiKey}}}") + "\"}" );
+    String jsonSendSocketInformation = String( "{ \"current\":" + String(random(300)) + ",\"tension\":" + String(random(300)) + ",\"apiKey\": \"" + String("72bcfb8d95bfc0a30c8715492ad96c3ced61de89810344a1c0ab4f5d37d586f2440ebec999e75ae57ae76ce5bc9e17f58e2e13a9f7cd91116aa9ae241eb08f73") + "\"}");
+    String jsonGetServerInformation = String( "{ \"apiKey\": \"" + String("72bcfb8d95bfc0a30c8715492ad96c3ced61de89810344a1c0ab4f5d37d586f2440ebec999e75ae57ae76ce5bc9e17f58e2e13a9f7cd91116aa9ae241eb08f73") + "\"}" );
     
     // Trigger the webhook
     Particle.publish("sendSocketInformation", jsonSendSocketInformation, PRIVATE);

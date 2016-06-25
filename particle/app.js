@@ -32,6 +32,7 @@ var path = require('path');
 var updateCheck = require('./lib/update-check');
 var Interpreter = require('./lib/interpreter.js');
 var crypto = require('crypto');
+var fs = require('fs');
 
 var cli = null;
 
@@ -42,6 +43,7 @@ global.particleEnhancement.photonSetupSuccess = null;
 global.particleEnhancement.photonNetworkList = null;
 global.particleEnhancement.setPhotonNetwork = null;
 global.particleEnhancement.photonDeviceId = null;
+global.particleEnhancement.photonApiKey = null;
 
 // TODO: Do photon authentication remotly
 global.particleEnhancement.username = '';
@@ -77,14 +79,28 @@ global.particleEnhancement.firmwareSetupDone = function() {
 }
 
 global.particleEnhancement.flashFirmware = function() {
+
 	var firmwarePath = path.join(__dirname, 'firmware', 'setup.ino');
+	var customFirmwarePath = path.join(__dirname, 'firmware', global.particleEnhancement.photonDeviceId + '.ino');
+
+	// Remove custom firmware file if it exists
+	if (fs.existsSync(customFirmwarePath)) {
+		fs.unlinkSync(customFirmwarePath);
+	}
+
+	var firmwareFile = fs.readFileSync(firmwarePath).toString();
+	var customFirmwareFile = firmwareFile.replace(/{{{apiKey}}}/g, global.particleEnhancement.photonApiKey);
+
+	console.log("CUSTOM FIRMWARE: ", customFirmwareFile);
+
+	fs.writeFileSync(customFirmwarePath, customFirmwareFile);
 
 	// Flash Photon with initial firmware
 	cli.handle(['node',
 				'app.js',
 				'flash',
 				global.particleEnhancement.deviceName,
-				firmwarePath
+				customFirmwarePath
 			], false);
 };
 
