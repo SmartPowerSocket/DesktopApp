@@ -16,9 +16,28 @@ class Home extends Component {
     errorMessage: PropTypes.string.isRequired
   };
 
+  constructor(props) {
+    super(props); // We are calling the React.Component constructor method
+
+    this.state = {
+      loading: false
+    };
+  }
+
   handleFormSubmit({ email, password }) {
+    this.setState({
+      loading: true
+    });
     // {email, password} - {email: email, password: password}
     this.props.signinUser({ email, password });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errorMessage) {
+      this.setState({
+        loading: false
+      });
+    } 
   }
 
   renderAlert() {
@@ -50,7 +69,11 @@ class Home extends Component {
                 <input {...password} type="password" className="form-control" />
               </fieldset>
               {this.renderAlert()}
-              <button action="submit" className="btn btn-primary">Sign in</button>
+              <button action="submit" className="btn btn-primary">
+              {this.state.loading ?
+                  <img width="60px" height="60px" src="images/spinner.gif" alt="Loading spinner" /> :
+                <span></span>} Sign in
+              </button>
             </form>
           </div>
         </div>
@@ -60,6 +83,7 @@ class Home extends Component {
 }
 
 function mapStateToProps(state) {
+
   return { errorMessage: state.auth.error };
 }
 

@@ -27,50 +27,55 @@ https://community.particle.io/t/using-spark-publish-json-format/12700
  }
  */
 
+String status = "Inactive";
+
 void setup() {
   // Subscribe to the webhook response event
   Particle.subscribe("hook-response/sendSocketInformation", photonRequestReturn , MY_DEVICES);
   Particle.subscribe("hook-response/getServerInformation", serverRequestReturn , MY_DEVICES);
 }
 
-void photonRequestReturn(const char *event, const char *data)
-{
-    Serial.print(event);
-    Serial.print(", data: ");
-    if (data) {
-        Serial.println(data);
-    } else {
-        Serial.println("NULL");   
-    }
-}
+void photonRequestReturn(const char *event, const char *data) { }
 
 void serverRequestReturn(const char *event, const char *data)
 {
-    Serial.print(event);
-    Serial.print(", data: ");
     if (data) {
-        Serial.println(data);
-    } else {
-        Serial.println("NULL");   
+        if (strstr(data, "Active") != NULL) {
+            status = "Active";
+        } else if (strstr(data, "Inactive") != NULL) {
+            status = "Inactive";
+        } else if (strstr(data, "Deleted") != NULL) {
+            status = "Deleted";
+        }
     }
 }
 
 void loop() {
-    if (Particle.connected() == false) {
-        Particle.connect();
+    if (Particle.connected() == false && status != "Deleted") {
+         Particle.connect();
+    } else if (status == "Deleted") {
+         Particle.disconnect();
     }
-    // Get some data
-    String jsonSendSocketInformation = String( "{ \"current\":" + String(random(300)) + ",\"tension\":" + String(random(300)) + ",\"apiKey\": \"" + String("{{{apiKey}}}") + "\"}");
-    String jsonGetServerInformation = String( "{ \"apiKey\": \"" + String("{{{apiKey}}}") + "\"}" );
-    
-    // Trigger the webhook
-    Particle.publish("sendSocketInformation", jsonSendSocketInformation, PRIVATE);
-    
-    // Wait 5 seconds
-    delay(5000);
-    
-    Particle.publish("getServerInformation", jsonGetServerInformation, PRIVATE);
-    
-    // Wait 5 seconds
-    delay(5000);
+
+    if (status == "Active") {
+
+        // Send reading data
+        String jsonSendSocketInformation = String( "{ \"current\":" + String(random(300)) + ",\"tension\":" + String(random(300)) + ",\"apiKey\": \"" + String("{{{apiKey}}}") + "\"}");
+            
+        // Trigger the webhook
+        Particle.publish("sendSocketInformation", jsonSendSocketInformation, PRIVATE);
+        
+        // Wait 5 seconds
+        delay(5000);
+    }
+
+    if (status != "Deleted") {
+        // Send auth data
+        String jsonGetServerInformation = String( "{ \"apiKey\": \"" + String("{{{apiKey}}}") + "\"}" );
+
+        Particle.publish("getServerInformation", jsonGetServerInformation, PRIVATE);
+        
+        // Wait 5 seconds
+        delay(5000);
+    }
 }
