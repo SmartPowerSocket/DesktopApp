@@ -64,6 +64,13 @@ var ApiClient = function (baseUrl, access_token) {
 		baseUrl: baseUrl || settings.apiUrl,
 		proxy: settings.proxyUrl || process.env.HTTPS_PROXY || process.env.https_proxy
 	});
+
+	/* Enhancement point */
+	var apiBaseUrl = global.particleEnhancement.apiUrl;
+
+	this.requestPrivateAPI = request.defaults({
+		baseUrl: apiBaseUrl
+	});
 };
 
 ApiClient.prototype = {
@@ -154,7 +161,32 @@ ApiClient.prototype = {
 	createAccessToken: function (client_id, username, password) {
 		var that = this;
 		return when.promise(function (resolve, reject) {
-			that.request({
+			
+			/* Enhancement point */
+			that.requestPrivateAPI({
+				uri: '/particle/oauth/token',
+				method: 'POST',
+				body: {
+					apiUrl: settings.apiUrl,
+					grant_type: 'password',
+					client_id: client_id,
+					client_secret: 'client_secret_here'
+				},
+				json: true
+			}, function (error, response, body) {
+
+				if (error) {
+					return reject(error);
+				}
+				if (body.error) {
+					reject(body.error_description);
+				} else {
+					resolve(body);
+				}
+			});
+
+
+			/*that.request({
 				uri: '/oauth/token',
 				method: 'POST',
 				form: {
@@ -174,7 +206,8 @@ ApiClient.prototype = {
 				} else {
 					resolve(body);
 				}
-			});
+			});*/
+
 		});
 	},
 

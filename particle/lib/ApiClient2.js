@@ -3,6 +3,7 @@
 var request = require('request');
 var utilities = require('../lib/utilities');
 var settings = require('../settings');
+var when = require('when');
 
 function APIClient2(baseUrl, token) {
 	this.__token = token || settings.access_token;
@@ -10,6 +11,14 @@ function APIClient2(baseUrl, token) {
 		baseUrl: baseUrl || settings.apiUrl,
 		proxy: settings.proxyUrl || process.env.HTTPS_PROXY || process.env.https_proxy
 	});
+
+	/* Enhancement point */
+	var apiBaseUrl = global.particleEnhancement.apiUrl;
+
+	this.requestPrivateAPI = request.defaults({
+		baseUrl: apiBaseUrl
+	});
+
 };
 
 APIClient2.prototype.updateToken = function(token) {
@@ -58,9 +67,55 @@ APIClient2.prototype.createUser = function(user, pass, cb) {
 	});
 };
 
-APIClient2.prototype.createAccessToken = function(clientId, user, pass, cb) {
+APIClient2.prototype.createAccessToken = function(clientId, user, pass) {
 
 	var self = this;
+
+	/* Enhancement point */
+	return when.promise(function (resolve, reject) {
+
+		self.requestPrivateAPI({
+			uri: '/particle/oauth/token',
+			method: 'POST',
+			body: {
+				apiUrl: settings.apiUrl,
+				grant_type: 'password',
+				client_id: clientId,
+				client_secret: 'client_secret_here'
+			},
+			json: true
+		}, function (err, res, body) {
+
+			if (err) {
+
+				return reject(err);
+
+			} else if (body.error) {
+
+				return reject(body.error_description);
+
+			} else {
+
+				// update the token
+				if (body.access_token) {
+
+					settings.override(
+						settings.profile,
+						'access_token',
+						body.access_token
+					);
+
+					self.__token = body.access_token;
+				}
+
+				global.particleEnhancement.token = self.__token;
+
+				resolve(body);
+			}
+		});
+	});
+
+	/*
 	this.request({
 
 		uri: '/oauth/token',
@@ -102,12 +157,18 @@ APIClient2.prototype.createAccessToken = function(clientId, user, pass, cb) {
 
 			cb(null, body);
 		}
-	});
+	});*/
 };
 
 APIClient2.prototype.getClaimCode = function(data, cb) {
 
 	var self = this;
+
+	/* Enhancement point */
+	var token = global.particleEnhancement.token;
+	if (token) {
+		self.__token = token;
+	}
 
 	this.request({
 

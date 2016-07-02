@@ -130,8 +130,8 @@ var that = {
 
 		/* Enhancement point */
 		return {
-			username: global.particleEnhancement.username,
-			password: global.particleEnhancement.password
+			username: "",
+			password: ""
 		};
 
 		/*

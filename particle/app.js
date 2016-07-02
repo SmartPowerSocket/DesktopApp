@@ -45,9 +45,7 @@ global.particleEnhancement.setPhotonNetwork = null;
 global.particleEnhancement.photonDeviceId = null;
 global.particleEnhancement.photonApiKey = null;
 
-// TODO: Do photon authentication remotly
-global.particleEnhancement.username = '';
-global.particleEnhancement.password = '';
+global.particleEnhancement.apiUrl = "https://d76a6af1.ngrok.io";
 global.particleEnhancement.deviceName = crypto.randomBytes(64).toString('hex');
 
 
@@ -91,7 +89,7 @@ global.particleEnhancement.flashFirmware = function() {
 	var firmwareFile = fs.readFileSync(firmwarePath).toString();
 	var customFirmwareFile = firmwareFile.replace(/{{{apiKey}}}/g, global.particleEnhancement.photonApiKey);
 
-	console.log("CUSTOM FIRMWARE: ", customFirmwareFile);
+	console.log("DEBUG: CUSTOM FIRMWARE: ", customFirmwareFile);
 
 	fs.writeFileSync(customFirmwarePath, customFirmwareFile);
 

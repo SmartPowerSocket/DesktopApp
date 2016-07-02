@@ -33,6 +33,7 @@ var util = require('util');
 var inquirer = require('inquirer');
 
 var ApiClient = require('../lib/ApiClient.js');
+var ApiClient2 = require('../lib/ApiClient2.js');
 var BaseCommand = require('./BaseCommand.js');
 var prompts = require('../lib/prompts.js');
 var settings = require('../settings.js');
@@ -188,7 +189,7 @@ AccessTokenCommands.prototype = extend(BaseCommand.prototype, {
 			this.getCredentials,
 			function (creds) {
 				/* Enhancement point */
-				var api = new ApiClient();
+				var api = new ApiClient2(); // ApiClient
 				return api.createAccessToken(clientName, creds.username, creds.password);
 			}
 		]);

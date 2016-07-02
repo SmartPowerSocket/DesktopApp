@@ -38,6 +38,7 @@ var specs = require('../lib/deviceSpecs');
 var BaseCommand = require('./BaseCommand.js');
 var prompts = require('../lib/prompts.js');
 var ApiClient = require('../lib/ApiClient.js');
+var ApiClient2 = require('../lib/ApiClient2.js');
 var utilities = require('../lib/utilities.js');
 
 var fs = require('fs');
@@ -595,14 +596,15 @@ CloudCommand.prototype = extend(BaseCommand.prototype, {
 		var allDone = pipeline([
 			//prompt for creds
 			function () {
+				console.log("DEBUG: getCredentials: Entry point");
 				return prompts.getCredentials(username);
 			},
 
 			//login to the server
 			function (creds) {
-
-				var api = new ApiClient();
-				username = creds.username;
+				/* Enhancement point */
+				var api = new ApiClient2();
+				username = creds.username; // this is an empty string
 				self.newSpin('Sending login details...').start();
 				return api.login(settings.clientId, creds.username, creds.password);
 			},
