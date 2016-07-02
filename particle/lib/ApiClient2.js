@@ -164,10 +164,8 @@ APIClient2.prototype.getClaimCode = function(data, cb) {
 
 	var self = this;
 
-	/* Enhancement point */
-	var token = global.particleEnhancement.token;
-	if (token) {
-		self.__token = token;
+	if (!self.__token) {
+		self.__token = settings.access_token;
 	}
 
 	this.request({

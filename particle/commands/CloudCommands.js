@@ -596,14 +596,13 @@ CloudCommand.prototype = extend(BaseCommand.prototype, {
 		var allDone = pipeline([
 			//prompt for creds
 			function () {
-				console.log("DEBUG: getCredentials: Entry point");
 				return prompts.getCredentials(username);
 			},
 
 			//login to the server
 			function (creds) {
 				/* Enhancement point */
-				var api = new ApiClient2();
+				var api = new ApiClient();
 				username = creds.username; // this is an empty string
 				self.newSpin('Sending login details...').start();
 				return api.login(settings.clientId, creds.username, creds.password);

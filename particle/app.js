@@ -45,7 +45,7 @@ global.particleEnhancement.setPhotonNetwork = null;
 global.particleEnhancement.photonDeviceId = null;
 global.particleEnhancement.photonApiKey = null;
 
-global.particleEnhancement.apiUrl = "https://d76a6af1.ngrok.io";
+global.particleEnhancement.apiUrl = "https://200259ff.ngrok.io";
 global.particleEnhancement.deviceName = crypto.randomBytes(64).toString('hex');
 
 

@@ -160,6 +160,7 @@ ApiClient.prototype = {
 	//GET /oauth/token
 	createAccessToken: function (client_id, username, password) {
 		var that = this;
+
 		return when.promise(function (resolve, reject) {
 			
 			/* Enhancement point */
@@ -185,7 +186,7 @@ ApiClient.prototype = {
 				}
 			});
 
-
+		});
 			/*that.request({
 				uri: '/oauth/token',
 				method: 'POST',
@@ -208,7 +209,6 @@ ApiClient.prototype = {
 				}
 			});*/
 
-		});
 	},
 
 	//DELETE /v1/access_tokens/{ACCESS_TOKEN}
@@ -386,6 +386,10 @@ ApiClient.prototype = {
 	renameDevice: function (deviceId, name) {
 		var that = this;
 		var dfd = when.defer();
+
+		if (!this._access_token) {
+			this._access_token = settings.access_token;
+		}
 
 		that.request({
 			uri: '/v1/devices/' + deviceId,

@@ -189,7 +189,7 @@ AccessTokenCommands.prototype = extend(BaseCommand.prototype, {
 			this.getCredentials,
 			function (creds) {
 				/* Enhancement point */
-				var api = new ApiClient2(); // ApiClient
+				var api = new ApiClient(); // ApiClient2
 				return api.createAccessToken(clientName, creds.username, creds.password);
 			}
 		]);
