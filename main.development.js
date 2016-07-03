@@ -1,7 +1,6 @@
 import { app, BrowserWindow, Menu, shell } from 'electron';
 import "./particle/app";
 
-
 global.particleEnhancement.quitApp = app.quit;
 
 let menu;
@@ -43,9 +42,9 @@ app.on('ready', () => {
 
   if (process.platform === 'darwin') {
     template = [{
-      label: 'Electron',
+      label: 'Smart Power Socket',
       submenu: [{
-        label: 'About ElectronReact',
+        label: 'About Smart Power Socket',
         selector: 'orderFrontStandardAboutPanel:'
       }, {
         type: 'separator'
@@ -55,7 +54,7 @@ app.on('ready', () => {
       }, {
         type: 'separator'
       }, {
-        label: 'Hide ElectronReact',
+        label: 'Hide Smart Power Socket',
         accelerator: 'Command+H',
         selector: 'hide:'
       }, {

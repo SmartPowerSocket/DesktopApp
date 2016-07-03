@@ -16,7 +16,7 @@ const config = {
 
   output: {
     ...baseConfig.output,
-    publicPath: 'http://localhost:3000/dist/'
+    publicPath: 'http://localhost:3002/dist/'
   },
 
   module: {

@@ -14,7 +14,7 @@ const pkg = require('./package.json');
 const deps = Object.keys(pkg.dependencies);
 const devDeps = Object.keys(pkg.devDependencies);
 
-const appName = argv.name || argv.n || pkg.productName;
+const appName = 'smartpowersocket'; //argv.name || argv.n || pkg.productName;
 const shouldUseAsar = argv.asar || argv.a || false;
 const shouldBuildAll = argv.all || false;
 
