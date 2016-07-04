@@ -15,7 +15,6 @@ export default {
   },
 
   plugins: [
-    new webpack.IgnorePlugin(/^(particle)$/),
 
     new webpack.optimize.UglifyJsPlugin({
       compressor: {

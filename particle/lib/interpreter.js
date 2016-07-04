@@ -160,6 +160,7 @@ Interpreter.prototype = {
 		});
 
 		for (var i = 0; i < files.length; i++) {
+
 			var cmdPath = path.join(settings.commandPath, files[i]);
 			try {
 				var Cmd = require(cmdPath);

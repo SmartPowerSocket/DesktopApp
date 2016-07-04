@@ -54,7 +54,12 @@ var strings = {
 
 // TODO: DRY this up somehow
 
-var cmd = path.basename(process.argv[1]);
+var basename = process.argv[1];
+if (!basename) {
+	basename = '-r'
+}
+
+var cmd = path.basename(basename);
 var arrow = chalk.green('>');
 var alert = chalk.yellow('!');
 var protip = function() {

@@ -50,7 +50,13 @@ var inquirer = require('inquirer');
 
 var arrow = chalk.green('>');
 var alert = chalk.yellow('!');
-var cmd = path.basename(process.argv[1]);
+
+var basename = process.argv[1];
+if (!basename) {
+	basename = '-r'
+}
+
+var cmd = path.basename(basename);
 
 // Use known platforms and add shortcuts
 var PLATFORMS = extend(utilities.knownPlatforms(), {
@@ -575,7 +581,7 @@ CloudCommand.prototype = extend(BaseCommand.prototype, {
 					console.log(sizeInfo);
 				}
 				console.log('Compile succeeded.');
-				console.log('Saved firmware to:', path.resolve(filename));
+				console.log('Saved firmware to:', path.resolve(filename || '.'));
 			});
 	},
 
@@ -912,7 +918,7 @@ CloudCommand.prototype = extend(BaseCommand.prototype, {
 	 * @returns {Array} array of filenames to include
 	 */
 	_processDirIncludes: function (dirname) {
-		dirname = path.resolve(dirname);
+		dirname = path.resolve(dirname || '.');
 
 		var includesFile = path.join(dirname, settings.dirIncludeFilename),
 			ignoreFile = path.join(dirname, settings.dirExcludeFilename);
