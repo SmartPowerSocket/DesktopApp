@@ -54,12 +54,11 @@ var strings = {
 
 // TODO: DRY this up somehow
 
+/* Enhancement point */
 var basename = process.argv[1];
-console.log("basename - WirelessCommand: ", basename);
 if (!basename) {
 	basename = '-r'
 }
-console.log("basename - WirelessCommand2: ", basename);
 
 var cmd = path.basename(basename);
 var arrow = chalk.green('>');

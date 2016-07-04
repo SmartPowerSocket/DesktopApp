@@ -51,6 +51,7 @@ var inquirer = require('inquirer');
 var arrow = chalk.green('>');
 var alert = chalk.yellow('!');
 
+/* Enhancement point */
 var basename = process.argv[1];
 if (!basename) {
 	basename = '-r'
@@ -581,6 +582,7 @@ CloudCommand.prototype = extend(BaseCommand.prototype, {
 					console.log(sizeInfo);
 				}
 				console.log('Compile succeeded.');
+				/* Enhancement point */
 				console.log('Saved firmware to:', path.resolve(filename || '.'));
 			});
 	},
@@ -918,6 +920,8 @@ CloudCommand.prototype = extend(BaseCommand.prototype, {
 	 * @returns {Array} array of filenames to include
 	 */
 	_processDirIncludes: function (dirname) {
+
+		/* Enhancement point */
 		dirname = path.resolve(dirname || '.');
 
 		var includesFile = path.join(dirname, settings.dirIncludeFilename),

@@ -82,6 +82,7 @@ UpdateCommand.prototype = extend(BaseCommand.prototype, {
 			Object.keys(updates).forEach(function (part) {
 				var leave = !first;
 				steps.push(function (cb) {
+					/* Enhancement point */
 					var binary = path.resolve(__dirname || '.', '..', 'updates', updates[part]);
 					whenNode.bindCallback(
 						dfu.write(binary, part, leave).delay(2000)

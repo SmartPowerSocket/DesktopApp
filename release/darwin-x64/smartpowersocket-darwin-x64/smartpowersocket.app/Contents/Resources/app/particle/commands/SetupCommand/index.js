@@ -30,12 +30,11 @@ var strings = {
 
 // TODO: DRY this up somehow
 
+/* Enhancement point */
 var basename = process.argv[1];
-console.log("basename - SetupCommand: ", basename);
 if (!basename) {
 	basename = '-r'
 }
-console.log("basename - SetupCommand2: ", basename);
 
 var cmd = path.basename(basename);
 var alert = chalk.yellow('!');

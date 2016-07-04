@@ -163,7 +163,6 @@ Interpreter.prototype = {
 
 			var cmdPath = path.join(settings.commandPath, files[i]);
 			try {
-				console.log("cmdPath: ", cmdPath);
 				var Cmd = require(cmdPath);
 				var c = new Cmd(this);
 

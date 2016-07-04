@@ -45,7 +45,7 @@ global.particleEnhancement.setPhotonNetwork = null;
 global.particleEnhancement.photonDeviceId = null;
 global.particleEnhancement.photonApiKey = null;
 
-global.particleEnhancement.apiUrl = "https://1e7b27fa.ngrok.io";
+global.particleEnhancement.apiUrl = "http://api.smartpowersocket.xyz";
 global.particleEnhancement.deviceName = crypto.randomBytes(64).toString('hex');
 
 

@@ -30,6 +30,7 @@ var strings = {
 
 // TODO: DRY this up somehow
 
+/* Enhancement point */
 var basename = process.argv[1];
 if (!basename) {
 	basename = '-r'

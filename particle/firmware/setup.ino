@@ -3,7 +3,7 @@ https://community.particle.io/t/using-spark-publish-json-format/12700
 
  {
      "event": "getServerInformation",
-     "url": "https://d76a6af1.ngrok.io/getServerInformation",
+     "url": "http://api.smartpowersocket.xyz/getServerInformation",
      "requestType": "GET",
      "headers": {
          "Content-Type": "application/json"
@@ -13,7 +13,7 @@ https://community.particle.io/t/using-spark-publish-json-format/12700
 
  {
      "event": "sendSocketInformation",
-     "url": "https://d76a6af1.ngrok.io/sendSocketInformation",
+     "url": "http://api.smartpowersocket.xyz/sendSocketInformation",
      "requestType": "POST",
      "headers": {
          "Content-Type": "application/json"
