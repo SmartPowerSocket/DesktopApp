@@ -29,7 +29,6 @@
 console.log('Particle Setup is included!');
 
 var path = require('path');
-var updateCheck = require('./lib/update-check');
 var Interpreter = require('./lib/interpreter.js');
 var crypto = require('crypto');
 var fs = require('fs');
@@ -103,15 +102,12 @@ global.particleEnhancement.flashFirmware = function() {
 };
 
 global.particleEnhancement.setup = function() {
-	
-	updateCheck(function () {
-		cli = new Interpreter();
-		cli.supressWarmupMessages = true;
-		cli.startup();
-		// Setup Photon Wifi and authentication
-		cli.handle(['node',
-					'app.js',
-					'setup'], true);
-	});
 
+	cli = new Interpreter();
+	cli.supressWarmupMessages = true;
+	cli.startup();
+	// Setup Photon Wifi and authentication
+	cli.handle(['node',
+				'app.js',
+				'setup'], true);
 };

@@ -12,8 +12,8 @@ class Home extends Component {
   static propTypes = {
     handleSubmit: PropTypes.func.isRequired,
     signinUser: PropTypes.func.isRequired,
-    fields: PropTypes.object.isRequired,
-    errorMessage: PropTypes.string.isRequired
+    fields: PropTypes.object.isRequired
+    //errorMessage: PropTypes.string.isRequired
   };
 
   constructor(props) {
@@ -37,7 +37,7 @@ class Home extends Component {
       this.setState({
         loading: false
       });
-    } 
+    }
   }
 
   renderAlert() {
