@@ -70,6 +70,10 @@ global.particleEnhancement.wifiValidationFailed = function(recheck) {
 	recheck({recheck: false});
 }
 
+global.particleEnhancement.noWifiWithInternet = function() {
+	global.particleEnhancement.photonSetupFailed = "Connect your computer to a wifi spot with internet!";
+};
+
 global.particleEnhancement.firmwareSetupDone = function() {
 
 	global.particleEnhancement.photonSetupSuccess = true;
@@ -87,8 +91,6 @@ global.particleEnhancement.flashFirmware = function() {
 
 	var firmwareFile = fs.readFileSync(firmwarePath).toString();
 	var customFirmwareFile = firmwareFile.replace(/{{{apiKey}}}/g, global.particleEnhancement.photonApiKey);
-
-	console.log("DEBUG: CUSTOM FIRMWARE: ", customFirmwareFile);
 
 	fs.writeFileSync(customFirmwarePath, customFirmwareFile);
 
