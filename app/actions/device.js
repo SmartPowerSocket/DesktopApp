@@ -6,18 +6,19 @@ import { ROOT_URL } from './types';
 export const CLAIM_DEVICE = 'claim_device';
 
 export function claimDevice(deviceId, deviceName) {
-
-  return function(dispatch) {
-    axios.post(`${ROOT_URL}/claimDevice`, {deviceId: deviceId, deviceName: deviceName}, {
+  return (dispatch) => {
+    axios.post(`${ROOT_URL}/claimDevice`, { deviceId, deviceName }, {
       headers: { authorization: localStorage.getItem('token') },
-    }).then(response => {
+    }).then(() => {
       dispatch({
         type: CLAIM_DEVICE
       });
       hashHistory.push('/successfulSetup');
+      return;
     })
-    .catch(function (error) {
-      remote.getGlobal('particleEnhancement').photonSetupFailed = "Device already registered!"
+    .catch(() => {
+      remote.getGlobal('particleEnhancement').photonSetupFailed
+        = 'Device already registered!';
       hashHistory.push('/failedSetup');
     });
   };

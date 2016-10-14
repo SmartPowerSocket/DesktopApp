@@ -17,7 +17,7 @@ export function signoutUser() {
 export function signinUser({ email, password }) {
   // redux thunk magic (return a function that allows us to call the dispatcher
   // whenever we resolve our promises)
-  return function(dispatch) {
+  return (dispatch) => {
     // { email, password } = { email: email, password: password }
     // Submit email/password to the server
     axios.post(`${ROOT_URL}/signin`, { email, password })
@@ -27,10 +27,12 @@ export function signinUser({ email, password }) {
         dispatch({ type: AUTH_USER });
         // - Save the JWT token
         localStorage.setItem('token', response.data.token);
-        
+
         remote.getGlobal('particleEnhancement').photonApiKey = response.data.apiKey;
 
         hashHistory.push('/setupInstructions');
+
+        return;
       })
       .catch(() => {
         // If request is bad...

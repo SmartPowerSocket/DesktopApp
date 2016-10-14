@@ -1,19 +1,18 @@
 import React, { Component, PropTypes } from 'react';
+import { reduxForm, propTypes } from 'redux-form';
 import styles from './Home.css';
-import { reduxForm } from 'redux-form';
 import * as actions from '../actions/auth';
 
 class Home extends Component {
 
   static contextTypes = {
-    router: React.PropTypes.object
+    router: PropTypes.object
   };
 
   static propTypes = {
-    handleSubmit: PropTypes.func.isRequired,
-    signinUser: PropTypes.func.isRequired,
-    fields: PropTypes.object.isRequired
-    //errorMessage: PropTypes.string.isRequired
+    ...propTypes,
+    signinUser: PropTypes.func,
+    errorMessage: PropTypes.string
   };
 
   constructor(props) {
@@ -24,20 +23,20 @@ class Home extends Component {
     };
   }
 
-  handleFormSubmit({ email, password }) {
-    this.setState({
-      loading: true
-    });
-    // {email, password} - {email: email, password: password}
-    this.props.signinUser({ email, password });
-  }
-
   componentWillReceiveProps(nextProps) {
     if (nextProps.errorMessage) {
       this.setState({
         loading: false
       });
     }
+  }
+
+  handleFormSubmit({ email, password }) {
+    this.setState({
+      loading: true
+    });
+    // {email, password} - {email: email, password: password}
+    this.props.signinUser({ email, password });
   }
 
   renderAlert() {
@@ -56,23 +55,23 @@ class Home extends Component {
     return (
       <div>
         <div className={styles.container}>
-          <img src="images/logo.png" alt="Smart Power Socket logo"></img>
+          <img src="images/logo.png" alt="Smart Power Socket logo" />
           <br />
           <div className={styles.menu}>
             <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
               <fieldset className="form-group">
-                <label>Email:</label>
+                <label htmlFor={'email'}>Email:</label>
                 <input {...email} className="form-control" />
               </fieldset>
               <fieldset className="form-group">
-                <label>Password:</label>
+                <label htmlFor={'password'}>Password:</label>
                 <input {...password} type="password" className="form-control" />
               </fieldset>
               {this.renderAlert()}
               <button action="submit" className="btn btn-primary">
-              {this.state.loading ?
+                {this.state.loading ?
                   <img width="60px" height="60px" src="images/spinner.gif" alt="Loading spinner" /> :
-                <span></span>} Sign in
+                    <span />} Sign in
               </button>
             </form>
           </div>
@@ -83,7 +82,6 @@ class Home extends Component {
 }
 
 function mapStateToProps(state) {
-
   return { errorMessage: state.auth.error };
 }
 

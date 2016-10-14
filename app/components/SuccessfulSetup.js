@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import styles from './SuccessfulSetup.css';
 import { Link } from 'react-router';
+import styles from './SuccessfulSetup.css';
 
 class SuccessfulSetup extends Component {
 

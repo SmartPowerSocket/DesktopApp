@@ -1,2 +1,2 @@
-//export const ROOT_URL = 'https://1e7b27fa.ngrok.io';
-export const ROOT_URL = 'http://api.smartpowersocket.xyz';
+export const ROOT_URL = 'https://7913e6f4.ngrok.io';
+export const ROOT_URL_PROD = 'http://api.smartpowersocket.xyz';

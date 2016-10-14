@@ -9,8 +9,7 @@ export default class Exit extends Component {
 
   render() {
     return (
-      <div>
-      </div>
+      <div />
     );
   }
 }

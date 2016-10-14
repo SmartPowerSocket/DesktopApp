@@ -1,5 +1,5 @@
 import { app, BrowserWindow, Menu, shell } from 'electron';
-import "./particle/app";
+import 'particle-gui';
 
 global.particleEnhancement.quitApp = app.quit;
 
@@ -21,6 +21,7 @@ app.on('window-all-closed', () => {
 const installExtensions = async () => {
   if (process.env.NODE_ENV === 'development') {
     const installer = require('electron-devtools-installer'); // eslint-disable-line global-require
+
     const extensions = [
       'REACT_DEVELOPER_TOOLS',
       'REDUX_DEVTOOLS'
@@ -33,6 +34,7 @@ const installExtensions = async () => {
     }
   }
 };
+
 app.on('ready', async () => {
   await installExtensions();
 
@@ -57,6 +59,7 @@ app.on('ready', async () => {
     mainWindow.openDevTools();
     mainWindow.webContents.on('context-menu', (e, props) => {
       const { x, y } = props;
+
       Menu.buildFromTemplate([{
         label: 'Inspect element',
         click() {
@@ -176,22 +179,22 @@ app.on('ready', async () => {
       submenu: [{
         label: 'Learn More',
         click() {
-          shell.openExternal('http://electron.atom.io');
+          shell.openExternal('https://github.com/SmartPowerSocket');
         }
       }, {
         label: 'Documentation',
         click() {
-          shell.openExternal('https://github.com/atom/electron/tree/master/docs#readme');
+          shell.openExternal('https://github.com/SmartPowerSocket');
         }
       }, {
         label: 'Community Discussions',
         click() {
-          shell.openExternal('https://discuss.atom.io/c/electron');
+          shell.openExternal('https://github.com/SmartPowerSocket');
         }
       }, {
         label: 'Search Issues',
         click() {
-          shell.openExternal('https://github.com/atom/electron/issues');
+          shell.openExternal('https://github.com/SmartPowerSocket');
         }
       }]
     }];
@@ -243,22 +246,22 @@ app.on('ready', async () => {
       submenu: [{
         label: 'Learn More',
         click() {
-          shell.openExternal('http://electron.atom.io');
+          shell.openExternal('https://github.com/SmartPowerSocket');
         }
       }, {
         label: 'Documentation',
         click() {
-          shell.openExternal('https://github.com/atom/electron/tree/master/docs#readme');
+          shell.openExternal('https://github.com/SmartPowerSocket');
         }
       }, {
         label: 'Community Discussions',
         click() {
-          shell.openExternal('https://discuss.atom.io/c/electron');
+          shell.openExternal('https://github.com/SmartPowerSocket');
         }
       }, {
         label: 'Search Issues',
         click() {
-          shell.openExternal('https://github.com/atom/electron/issues');
+          shell.openExternal('https://github.com/SmartPowerSocket');
         }
       }]
     }];

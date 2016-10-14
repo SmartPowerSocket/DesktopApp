@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import styles from './FailedSetup.css';
 import { Link } from 'react-router';
 import { remote } from 'electron';
+import React, { Component } from 'react';
+import styles from './FailedSetup.css';
 
 class FailedSetup extends Component {
 

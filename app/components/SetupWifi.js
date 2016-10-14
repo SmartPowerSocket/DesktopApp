@@ -1,25 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { remote } from 'electron';
-import styles from './SetupWifi.css';
 import TimerMixin from 'react-timer-mixin';
+import styles from './SetupWifi.css';
 import * as authActions from '../actions/auth';
 import * as deviceActions from '../actions/device';
 
-function collect() {
-  let ret = {};
-  let len = arguments.length;
-  for (let i=0; i<len; i++) {
-    for (let p in arguments[i]) {
-      if (arguments[i].hasOwnProperty(p)) {
-        ret[p] = arguments[i][p];
-      }
-    }
-  }
-  return ret;
-}
-
-let actions = collect(authActions, deviceActions);
+const actions = Object.assign(authActions, deviceActions);
 let interval = null;
 
 class SetupWifi extends Component {
@@ -41,9 +28,6 @@ class SetupWifi extends Component {
       loading: false,
       connectLabel: 'Connect'
     };
-  }
-  componentWillUnmount() {
-    TimerMixin.clearInterval(interval);
   }
 
   componentWillMount() {
@@ -81,6 +65,10 @@ class SetupWifi extends Component {
     }, 1000); // Wait 1 second
   }
 
+  componentWillUnmount() {
+    TimerMixin.clearInterval(interval);
+  }
+
   onInputChange(networkPassword) {
     this.setState({
       networkPassword
@@ -116,11 +104,25 @@ class SetupWifi extends Component {
         let output = null;
 
         if (this.state.selectedNetwork === network) {
-          output = (<a onClick={() => this.selectNetwork(network)} key={network}
-            className="list-group-item active">{network}</a>);
+          output = (
+            <button
+              onClick={() => this.selectNetwork(network)}
+              key={network}
+              className="list-group-item active"
+            >
+              {network}
+            </button>
+          );
         } else {
-          output = (<a onClick={() => this.selectNetwork(network)} key={network}
-            className="list-group-item">{network}</a>);
+          output = (
+            <button
+              onClick={() => this.selectNetwork(network)}
+              key={network}
+              className="list-group-item"
+            >
+              {network}
+            </button>
+          );
         }
         return output;
       });
@@ -132,33 +134,42 @@ class SetupWifi extends Component {
             {networkItems}
           </div>
           {this.state.selectedNetwork ?
-          <form className={styles.networkForm} onSubmit={this.onSubmit.bind(this)}>
-            <div className="form-group">
-              <input type="password" className="form-control"
-                style={{ height: '54px', fontSize: '120%' }}
-                placeholder="Network Password" value={this.state.networkPassword}
-                onChange={ event => this.onInputChange(event.target.value) }
-              >
-              </input>
-            </div>
-            <div className={styles.menuOptions}>
-              {this.state.networkPassword.length > 0 ?
-              <a onClick={this.connectToNetwork.bind(this)}>{this.state.connectLabel}</a>
-              : <span></span>}
-              <br />
+            <form
+              className={styles.networkForm}
+              onSubmit={this.onSubmit.bind(this)}
+            >
+              <div className="form-group">
+                <input
+                  type="password"
+                  className="form-control"
+                  style={{ height: '54px', fontSize: '120%' }}
+                  placeholder="Network Password" value={this.state.networkPassword}
+                  onChange={event => this.onInputChange(event.target.value)}
+                />
+              </div>
+              <div className={styles.menuOptions}>
+                {this.state.networkPassword.length > 0 ?
+                  <button
+                    onClick={this.connectToNetwork.bind(this)}
+                  >
+                    {this.state.connectLabel}
+                  </button>
+              : <span /> }
+                <br />
                 {this.state.loading ?
                   <img src="images/spinner.gif" alt="Loading spinner" /> :
-                <span></span>}
-            </div>
-          </form> : <span></span>}
-      </div>
+                    <span />
+                }
+              </div>
+            </form> : <span />}
+        </div>
 
       );
     } else {
       body = (<div className={styles.loading}>
-                  Searching for Smart Power Sockets...<br />
-                  <img src="images/spinner.gif" alt="Loading spinner" />
-              </div>);
+        Searching for Smart Power Sockets...<br />
+        <img src="images/spinner.gif" alt="Loading spinner" />
+      </div>);
     }
 
     return body;
