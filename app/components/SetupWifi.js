@@ -23,8 +23,12 @@ class SetupWifi extends Component {
 
     this.state = {
       networks: null,
+      manualSetup: false,
       selectedNetwork: '',
+      selectedNetworkSecurityType: '',
+      networkName: '',
       networkPassword: '',
+      networkSecurityType: '',
       loading: false,
       connectLabel: 'Connect'
     };
@@ -46,6 +50,10 @@ class SetupWifi extends Component {
                  !this.state.networks) {
         this.setState({
           networks: remote.getGlobal('particleEnhancement').photonNetworkList
+        });
+      } else if (remote.getGlobal('particleEnhancement').manualSetup) {
+        this.setState({
+          manualSetup: true
         });
       } else if (!timeoutIsSet) {
         timeoutIsSet = true;
@@ -69,9 +77,21 @@ class SetupWifi extends Component {
     TimerMixin.clearInterval(interval);
   }
 
-  onInputChange(networkPassword) {
+  onNetworkPasswordChange(networkPassword) {
     this.setState({
       networkPassword
+    });
+  }
+
+  onNetworkSecurityTypeChange(networkSecurityType) {
+    this.setState({
+      networkSecurityType
+    });
+  }
+
+  onNetworkNameChange(networkName) {
+    this.setState({
+      networkName
     });
   }
 
@@ -81,8 +101,13 @@ class SetupWifi extends Component {
   }
 
   connectToNetwork() {
-    remote.getGlobal('particleEnhancement').setPhotonNetwork(this.state.selectedNetwork,
-      this.state.networkPassword);
+    if (this.state.manualSetup) {
+      remote.getGlobal('particleEnhancement').setPhotonNetworkManually(this.state.networkName,
+        this.state.networkPassword, this.state.networkSecurityType);
+    } else {
+      remote.getGlobal('particleEnhancement').setPhotonNetwork(this.state.selectedNetwork,
+        this.state.networkPassword);
+    }
     this.setState({
       connectLabel: 'Connecting',
       loading: true
@@ -99,7 +124,55 @@ class SetupWifi extends Component {
   showPhotonNetworks() {
     let body = null;
 
-    if (this.state.networks && this.state.networks.length > 0) {
+    if (this.state.manualSetup) {
+      body = (
+        <div className={styles.container}>
+          <h1>Manual setup</h1>
+          <h2>I am unable to automatically connect to Wi-Fi networks</h2>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Network Name" value={this.state.networkName}
+            onChange={event => this.onNetworkNameChange(event.target.value)}
+          />
+          <br />
+          <input
+            type="password"
+            className="form-control"
+            placeholder="Network Password" value={this.state.networkPassword}
+            onChange={event => this.onNetworkPasswordChange(event.target.value)}
+          />
+          <br />
+          <span><b>Security type:</b></span> <br />
+          <input onClick={() => this.onNetworkSecurityTypeChange('None')} type="radio" name="networkSecurity" value="None" /> None <br />
+          <input onClick={() => this.onNetworkSecurityTypeChange('WEP Shared')} type="radio" name="networkSecurity" value="WEP Shared" /> WEP Shared <br />
+          <input onClick={() => this.onNetworkSecurityTypeChange('WPA TKIP')} type="radio" name="networkSecurity" value="WPA TKIP" /> WPA TKIP <br />
+          <input onClick={() => this.onNetworkSecurityTypeChange('WPA AES')} type="radio" name="networkSecurity" value="WPA AES" /> WPA AES <br />
+          <input onClick={() => this.onNetworkSecurityTypeChange('WPA2 AES')} type="radio" name="networkSecurity" value="WPA2 AES" /> WPA2 AES <br />
+          <input onClick={() => this.onNetworkSecurityTypeChange('WPA2 TKIP')} type="radio" name="networkSecurity" value="WPA2 TKIP" /> WPA2 TKIP <br />
+          <input onClick={() => this.onNetworkSecurityTypeChange('WPA2 Mixed')} type="radio" name="networkSecurity" value="WPA2 Mixed" /> WPA2 Mixed <br />
+          <input onClick={() => this.onNetworkSecurityTypeChange('WPA2')} type="radio" name="networkSecurity" value="WPA2" /> WPA2
+          <br />
+          <div className={styles.menuOptions}>
+            {this.state.networkName.length > 0 &&
+              this.state.networkPassword.length > 0 &&
+              this.state.networkSecurityType.length > 0 ?
+                <button
+                  className="btn-lg btn-primary"
+                  onClick={this.connectToNetwork.bind(this)}
+                >
+                  {this.state.connectLabel}
+                </button>
+          : <span /> }
+            <br />
+            {this.state.loading ?
+              <img src="images/spinner.gif" alt="Loading spinner" /> :
+                <span />
+            }
+          </div>
+        </div>
+      );
+    } else if (this.state.networks && this.state.networks.length > 0) {
       const networkItems = this.state.networks.map((network) => {
         let output = null;
 
@@ -144,12 +217,13 @@ class SetupWifi extends Component {
                   className="form-control"
                   style={{ height: '54px', fontSize: '120%' }}
                   placeholder="Network Password" value={this.state.networkPassword}
-                  onChange={event => this.onInputChange(event.target.value)}
+                  onChange={event => this.onNetworkPasswordChange(event.target.value)}
                 />
               </div>
               <div className={styles.menuOptions}>
                 {this.state.networkPassword.length > 0 ?
                   <button
+                    className="btn-lg btn-primary"
                     onClick={this.connectToNetwork.bind(this)}
                   >
                     {this.state.connectLabel}

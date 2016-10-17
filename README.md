@@ -11,6 +11,8 @@
 
 5) Edit app/actions/types.js with the NGROK URL
 
+5.1) [WINDOWS ONLY] Install Python 2.7 and add to environment variables
+
 6) Run: ```npm install```
 
 7) Run: ```npm rebuild --runtime=electron --target=1.4.3 --disturl=https://atom.io/download/atom-shell --build-from-source```

@@ -14,7 +14,8 @@ global.particleEnhancement = {
 	photonSetupSuccess: null,
 	photonNetworkList: null,
 	setPhotonNetwork: null,
-	
+	setPhotonNetworkManually: null,
+
 	photonDeviceId: null,
 	photonApiKey: null,
 	apiUrl: "http://api.smartpowersocket.xyz",

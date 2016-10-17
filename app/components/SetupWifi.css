@@ -7,6 +7,12 @@
   margin-right: auto;
 }
 
+.container h1 {
+  font-size: 140%;
+  margin-bottom: 5%;
+  text-align: center;
+}
+
 .container h2 {
   font-size: 120%;
   margin-bottom: 5%;
@@ -44,4 +50,9 @@
 .loading img {
   margin-top: 1%;
   width: 7%;
+}
+
+input {
+  height: '54px';
+  fontSize: '120%';
 }

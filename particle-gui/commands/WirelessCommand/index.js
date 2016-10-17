@@ -140,14 +140,16 @@ WirelessCommand.prototype.list = function list(macAddress) {
 };
 
 function manualAsk(cb) {
-	return prompt([{
+	/* Enhancement point */
+	/*return prompt([{
 
 		type: 'confirm',
 		name: 'manual',
 		message: "We can still proceed in 'manual' mode. Would you like to continue?",
 		default: true
 
-	}], cb);
+	}], cb);*/
+	return cb({manual: true});
 }
 
 WirelessCommand.prototype.__networks = function networks(err, dat) {
@@ -474,13 +476,16 @@ WirelessCommand.prototype.setup = function setup(photon, cb) {
 		}
 
 		function manualConnect() {
-			return prompt([{
+			/* Enhancement point */
+			global.particleEnhancement.manualSetup = true;
+			/*return prompt([{
 
 				type: 'input',
 				name: 'connect',
 				message: util.format('Please connect to the %s network now. Press enter when ready.', photon || 'Photon\'s Wi-Fi')
 
-			}], manualReady);
+			}], manualReady);*/
+			manualReady({connect: true});
 		}
 	};
 
@@ -532,8 +537,9 @@ WirelessCommand.prototype.__configure = function __configure(ssid, cb) {
 	console.log();
 
 	/* Enhancement point */
+	var manual = global.particleEnhancement.manualSetup ? global.particleEnhancement.manualSetup : false;
 	scanChoice({
-		manual: false
+		manual: manual
 	});
 	/*
 	prompt([{
@@ -550,7 +556,8 @@ WirelessCommand.prototype.__configure = function __configure(ssid, cb) {
 
 		if (ans.manual) {
 
-			return prompt([{
+			/* Enhancement point */
+			/*return prompt([{
 
 				type: 'input',
 				name: 'network',
@@ -588,7 +595,15 @@ WirelessCommand.prototype.__configure = function __configure(ssid, cb) {
 					return "You must enter a password. Let's try again...";
 				}
 
-			}], manualChoices);
+			}], manualChoices);*/
+			global.particleEnhancement.setPhotonNetworkManually = function(network, password, security) {
+					 manualChoices({
+						 network: network,
+						 password: password,
+						 security: security
+					 });
+			};
+			return;
 		}
 
 		self.newSpin('Asking the Photon to scan for nearby Wi-Fi networks...').start();
