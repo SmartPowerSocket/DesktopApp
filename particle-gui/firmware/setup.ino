@@ -1,4 +1,4 @@
-/* 
+/*
 https://community.particle.io/t/using-spark-publish-json-format/12700
 
  {
@@ -31,8 +31,8 @@ String status = "Inactive";
 
 void setup() {
   // Subscribe to the webhook response event
-  Particle.subscribe("hook-response/sendSocketInformation", photonRequestReturn , MY_DEVICES);
-  Particle.subscribe("hook-response/getServerInformation", serverRequestReturn , MY_DEVICES);
+  Particle.subscribe("sendSocketInformation", photonRequestReturn , MY_DEVICES);
+  Particle.subscribe("getServerInformation", serverRequestReturn , MY_DEVICES);
 }
 
 void photonRequestReturn(const char *event, const char *data) { }
@@ -61,10 +61,10 @@ void loop() {
 
         // Send reading data
         String jsonSendSocketInformation = String( "{ \"current\":" + String(random(300)) + ",\"tension\":" + String(random(300)) + ",\"apiKey\": \"" + String("{{{apiKey}}}") + "\"}");
-            
+
         // Trigger the webhook
         Particle.publish("sendSocketInformation", jsonSendSocketInformation, PRIVATE);
-        
+
         // Wait 5 seconds
         delay(5000);
     }
@@ -74,7 +74,7 @@ void loop() {
         String jsonGetServerInformation = String( "{ \"apiKey\": \"" + String("{{{apiKey}}}") + "\"}" );
 
         Particle.publish("getServerInformation", jsonGetServerInformation, PRIVATE);
-        
+
         // Wait 5 seconds
         delay(5000);
     }

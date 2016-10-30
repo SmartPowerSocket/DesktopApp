@@ -9,9 +9,11 @@
 
 4) Run NGROK: ```ngrok http 3000```
 
-5) Edit app/actions/types.js with the NGROK URL
+5.1) Edit app/actions/types.js with the NGROK URL
 
-5.1) [WINDOWS ONLY] Install Python 2.7 and add to environment variables
+5.2) Edit particle-gui/index.js with the NGROK URL
+
+5.3) [WINDOWS ONLY] Install Python 2.7 and add to environment variables
 
 6) Run: ```npm install```
 
