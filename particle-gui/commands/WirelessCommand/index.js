@@ -478,6 +478,11 @@ WirelessCommand.prototype.setup = function setup(photon, cb) {
 		function manualConnect() {
 			/* Enhancement point */
 			global.particleEnhancement.manualSetup = true;
+			global.particleEnhancement.connectedToPhotonManually = true;
+
+			global.particleEnhancement.userConnectedToPhotonManually = function() {
+				manualReady({connect: true});
+			};
 			/*return prompt([{
 
 				type: 'input',
@@ -485,7 +490,6 @@ WirelessCommand.prototype.setup = function setup(photon, cb) {
 				message: util.format('Please connect to the %s network now. Press enter when ready.', photon || 'Photon\'s Wi-Fi')
 
 			}], manualReady);*/
-			manualReady({connect: true});
 		}
 	};
 
@@ -537,6 +541,7 @@ WirelessCommand.prototype.__configure = function __configure(ssid, cb) {
 	console.log();
 
 	/* Enhancement point */
+	global.particleEnhancement.manualSetup = true; // TEMP
 	var manual = global.particleEnhancement.manualSetup ? global.particleEnhancement.manualSetup : false;
 	scanChoice({
 		manual: manual

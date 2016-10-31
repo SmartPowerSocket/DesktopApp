@@ -127,7 +127,7 @@ var that = {
 
 	getCredentials: function (username) {
 		/* Enhancement point */
-		//var creds = when.defer();
+		var creds = when.defer();
 
 		creds.resolve({
 			username: "",

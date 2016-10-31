@@ -16,9 +16,10 @@ global.particleEnhancement = {
 	setPhotonNetwork: null,
 	setPhotonNetworkManually: null,
 
+	manualSetup: false,
 	photonDeviceId: null,
 	photonApiKey: null,
-	apiUrl: "http://api.smartpowersocket.xyz",
+	apiUrl: "http://6acf084b.ngrok.io",
 	deviceName: crypto.randomBytes(64).toString('hex')
 };
 
