@@ -25,6 +25,7 @@ class SetupWifi extends Component {
       networks: null,
       manualSetup: false,
       manuallyConnectToPhoton: false,
+      needToSetNetworkBack: false,
       manualPhotonName: '',
       selectedNetwork: '',
       selectedNetworkSecurityType: '',
@@ -33,7 +34,7 @@ class SetupWifi extends Component {
       networkSecurityType: '',
       loading: false,
       connectLabel: 'Connect',
-      connectedToPhotonLabel: 'Ok, connected!'
+      connectedLabel: 'Ok, connected!'
     };
   }
 
@@ -53,6 +54,10 @@ class SetupWifi extends Component {
                  !this.state.networks) {
         this.setState({
           networks: remote.getGlobal('particleEnhancement').photonNetworkList
+        });
+      } else if (remote.getGlobal('particleEnhancement').needToSetNetworkBack) {
+        this.setState({
+          needToSetNetworkBack: true
         });
       } else if (remote.getGlobal('particleEnhancement').manualSetup &&
                   this.state.manuallyConnectToPhoton !== null) {
@@ -106,11 +111,18 @@ class SetupWifi extends Component {
     this.connectToNetwork();
   }
 
+  connectedBackToHomeNetwork() {
+    this.setState({
+      needToSetNetworkBack: null
+    });
+    remote.getGlobal('particleEnhancement').setNetworkBackToPrevious();
+  }
+
   connectedToPhoton() {
     this.setState({
       manuallyConnectToPhoton: null
     });
-    remote.getGlobal('particleEnhancement').manualPhotonName = null;
+    // remote.getGlobal('particleEnhancement').manualPhotonName = null;
     remote.getGlobal('particleEnhancement').userConnectedToPhotonManually();
   }
 
@@ -138,7 +150,23 @@ class SetupWifi extends Component {
   showPhotonNetworks() {
     let body = null;
 
-    if (this.state.manuallyConnectToPhoton) {
+    if (this.state.needToSetNetworkBack) {
+      body = (
+        <div className={styles.container}>
+          <h1>Manual setup</h1>
+          <h2>Re-connect your PC back to your home Wi-fi network</h2>
+          <br />
+          <div className={styles.menuOptions}>
+            <button
+              className="btn-lg btn-primary"
+              onClick={this.connectedBackToHomeNetwork.bind(this)}
+            >
+              {this.state.connectedLabel}
+            </button>
+          </div>
+        </div>
+      );
+    } else if (this.state.manuallyConnectToPhoton) {
       body = (
         <div className={styles.container}>
           <h1>Manual setup</h1>
@@ -150,7 +178,7 @@ class SetupWifi extends Component {
               className="btn-lg btn-primary"
               onClick={this.connectedToPhoton.bind(this)}
             >
-              {this.state.connectedToPhotonLabel}
+              {this.state.connectedLabel}
             </button>
           </div>
         </div>

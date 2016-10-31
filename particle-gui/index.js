@@ -16,6 +16,10 @@ global.particleEnhancement = {
 	setPhotonNetwork: null,
 	setPhotonNetworkManually: null,
 
+	needToSetNetworkBack: null,
+	setNetworkBackToPrevious: null,
+	userConnectedToPhotonManually: null,
+	manualPhotonName: null,
 	manualSetup: false,
 	photonDeviceId: null,
 	photonApiKey: null,

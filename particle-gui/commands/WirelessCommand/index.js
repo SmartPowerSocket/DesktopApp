@@ -910,6 +910,8 @@ WirelessCommand.prototype.__configure = function __configure(ssid, cb) {
 	};
 
 	function manualReconnectPrompt() {
+		/* Enhancement point */
+		/*
 		prompt([{
 
 			name: 'reconnect',
@@ -917,6 +919,12 @@ WirelessCommand.prototype.__configure = function __configure(ssid, cb) {
 			message: 'Please re-connect your computer to your Wi-Fi network now. Press enter when ready.'
 
 		}], manualPrompt);
+		*/
+
+		global.particleEnhancement.needToSetNetworkBack = true;
+		global.particleEnhancement.setNetworkBackToPrevious = function() {
+			manualPrompt();
+		};
 	}
 
 	function manualPrompt() {
