@@ -24,13 +24,16 @@ class SetupWifi extends Component {
     this.state = {
       networks: null,
       manualSetup: false,
+      manuallyConnectToPhoton: false,
+      manualPhotonName: '',
       selectedNetwork: '',
       selectedNetworkSecurityType: '',
       networkName: '',
       networkPassword: '',
       networkSecurityType: '',
       loading: false,
-      connectLabel: 'Connect'
+      connectLabel: 'Connect',
+      connectedToPhotonLabel: 'Ok, connected!'
     };
   }
 
@@ -51,9 +54,12 @@ class SetupWifi extends Component {
         this.setState({
           networks: remote.getGlobal('particleEnhancement').photonNetworkList
         });
-      } else if (remote.getGlobal('particleEnhancement').manualSetup) {
+      } else if (remote.getGlobal('particleEnhancement').manualSetup &&
+                  this.state.manuallyConnectToPhoton !== null) {
         this.setState({
-          manualSetup: true
+          manualSetup: true,
+          manuallyConnectToPhoton: true,
+          manualPhotonName: remote.getGlobal('particleEnhancement').manualPhotonName
         });
       } else if (!timeoutIsSet) {
         timeoutIsSet = true;
@@ -100,6 +106,14 @@ class SetupWifi extends Component {
     this.connectToNetwork();
   }
 
+  connectedToPhoton() {
+    this.setState({
+      manuallyConnectToPhoton: null
+    });
+    remote.getGlobal('particleEnhancement').manualPhotonName = null;
+    remote.getGlobal('particleEnhancement').userConnectedToPhotonManually();
+  }
+
   connectToNetwork() {
     if (this.state.manualSetup) {
       remote.getGlobal('particleEnhancement').setPhotonNetworkManually(this.state.networkName,
@@ -124,7 +138,24 @@ class SetupWifi extends Component {
   showPhotonNetworks() {
     let body = null;
 
-    if (this.state.manualSetup) {
+    if (this.state.manuallyConnectToPhoton) {
+      body = (
+        <div className={styles.container}>
+          <h1>Manual setup</h1>
+          <h2>I am unable to automatically connect to SPS</h2>
+          <h2>Please connect to the {this.state.manualPhotonName} Wi-Fi network</h2>
+          <br />
+          <div className={styles.menuOptions}>
+            <button
+              className="btn-lg btn-primary"
+              onClick={this.connectedToPhoton.bind(this)}
+            >
+              {this.state.connectedToPhotonLabel}
+            </button>
+          </div>
+        </div>
+      );
+    } else if (this.state.manualSetup) {
       body = (
         <div className={styles.container}>
           <h1>Manual setup</h1>

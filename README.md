@@ -15,7 +15,7 @@
 
 7) [WINDOWS ONLY] Install Python 2.7 and add to environment variables
 
-8) [MAC ONLY] Remove .particle from /Users/daniel if you used particle-cli previously
+8) [MAC ONLY] Remove .particle from ($HOME, $HOMEPATH, $USERPROFILE, or $home) if you used particle-cli previously
 
 6) Run: ```npm install```
 

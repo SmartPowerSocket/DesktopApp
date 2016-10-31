@@ -477,8 +477,8 @@ WirelessCommand.prototype.setup = function setup(photon, cb) {
 
 		function manualConnect() {
 			/* Enhancement point */
+			global.particleEnhancement.manualPhotonName = photon ? photon : 'Photon\'s Wi-Fi';
 			global.particleEnhancement.manualSetup = true;
-			global.particleEnhancement.connectedToPhotonManually = true;
 
 			global.particleEnhancement.userConnectedToPhotonManually = function() {
 				manualReady({connect: true});
