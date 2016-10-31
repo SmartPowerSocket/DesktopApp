@@ -1,0 +1,53 @@
+[1] String status = "Inactive";
+[1]
+[1] void setup() {
+[1]   // Sub
+[1] scribe to the webhook response event
+[1]   Particle.subscribe("sendSocketInformation", photonRequestReturn , MY_DEVICES);
+[1]   Particle.subscribe("getServerInformation", serverRequestReturn , MY_DEVICES);
+[1] }
+[1]
+[1] void photonRequestReturn(const char *event, const char *data) { }
+[1]
+[1] void serverRequestReturn(const char *event, const char *data)
+[1] {
+[1]     if (data) {
+[1]         if (strstr(data, "Active") != NULL) {
+[1]             status = "Active";
+[1]         } else if (strstr(data, "Inactive") != NULL) {
+[1]             status = "Inactive";
+[1]         } else if (strstr(data, "Deleted") != NULL) {
+[1]             status = "Deleted";
+[1]         }
+[1]     }
+[1] }
+[1]
+[1] void loop() {
+[1]     if (Particle.connected() == false && status != "Deleted") {
+[1]          Particle.connect();
+[1]     } else if (status == "Deleted") {
+[1]          Particle.disconnect();
+[1]     }
+[1]
+[1]     if (status == "Active") {
+[1]
+[1]         // Send reading data
+[1]         String jsonSendSocketInformation = String( "{ \"current\":" + String(random(300)) + ",\"tension\":" + String(random(300)) + ",\"apiKey\": \"" + String("ccc1dced51122284e662b3f093ac3f3061ad671356c9fde19de86f91d604f017cb968f6285856375c81fd41c6a015d07ba2c45c076eb6c460fcb28d7fc17c99d") + "\"}");
+[1]
+[1]         // Trigger the webhook
+[1]         Particle.publish("sendSocketInformation", jsonSendSocketInformation, PRIVATE);
+[1]
+[1]         // Wait 5 seconds
+[1]         delay(5000);
+[1]     }
+[1]
+[1]     if (status != "Deleted") {
+[1]         // Send auth data
+[1]         String jsonGetServerInformation = String( "{ \"apiKey\": \"" + String("ccc1dced51122284e662b3f093ac3f3061ad671356c9fde19de86f91d604f017cb968f6285856375c81fd41c6a015d07ba2c45c076eb6c460fcb28d7fc17c99d") + "\"}" );
+[1]
+[1]         Particle.publish("getServerInformation", jsonGetServerInformation, PRIVATE);
+[1]
+[1]         // Wait 5 seconds
+[1]         delay(5000);
+[1]     }
+[1] }

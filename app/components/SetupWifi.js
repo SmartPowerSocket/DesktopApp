@@ -112,9 +112,7 @@ class SetupWifi extends Component {
   }
 
   connectedBackToHomeNetwork() {
-    this.setState({
-      needToSetNetworkBack: null
-    });
+    console.log(this);
     remote.getGlobal('particleEnhancement').needToSetNetworkBack = null;
     remote.getGlobal('particleEnhancement').setNetworkBackToPrevious();
   }
