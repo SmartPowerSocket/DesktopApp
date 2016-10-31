@@ -541,7 +541,6 @@ WirelessCommand.prototype.__configure = function __configure(ssid, cb) {
 	console.log();
 
 	/* Enhancement point */
-	global.particleEnhancement.manualSetup = true; // TEMP
 	var manual = global.particleEnhancement.manualSetup ? global.particleEnhancement.manualSetup : false;
 	scanChoice({
 		manual: manual
