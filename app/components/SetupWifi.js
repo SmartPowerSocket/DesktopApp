@@ -115,6 +115,7 @@ class SetupWifi extends Component {
     this.setState({
       needToSetNetworkBack: null
     });
+    remote.getGlobal('particleEnhancement').needToSetNetworkBack = null;
     remote.getGlobal('particleEnhancement').setNetworkBackToPrevious();
   }
 
@@ -122,7 +123,7 @@ class SetupWifi extends Component {
     this.setState({
       manuallyConnectToPhoton: null
     });
-    // remote.getGlobal('particleEnhancement').manualPhotonName = null;
+    remote.getGlobal('particleEnhancement').manualPhotonName = null;
     remote.getGlobal('particleEnhancement').userConnectedToPhotonManually();
   }
 
