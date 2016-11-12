@@ -71,7 +71,7 @@ class Home extends Component {
               <button action="submit" className="btn btn-primary">
                 {this.state.loading ?
                   <img width="60px" height="60px" src="images/spinner.gif" alt="Loading spinner" /> :
-                    <span />} Sign in
+                  <span />} Sign in
               </button>
             </form>
           </div>

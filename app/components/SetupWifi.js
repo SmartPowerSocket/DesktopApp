@@ -225,7 +225,7 @@ class SetupWifi extends Component {
             <br />
             {this.state.loading ?
               <img src="images/spinner.gif" alt="Loading spinner" /> :
-                <span />
+              <span />
             }
           </div>
         </div>
@@ -290,7 +290,7 @@ class SetupWifi extends Component {
                 <br />
                 {this.state.loading ?
                   <img src="images/spinner.gif" alt="Loading spinner" /> :
-                    <span />
+                  <span />
                 }
               </div>
             </form> : <span />}
