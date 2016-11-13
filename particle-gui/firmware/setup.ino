@@ -43,8 +43,8 @@
              "Content-Type": "application/json"
          },
          "json": {
-             "tension": "{{tension1}}",
-             "current": "{{current1}}",
+             "tension": "{{tension}}",
+             "current": "{{current}}",
              "socketNum": "{{socketNum}}",
              "apiKey": "{{apiKey}}"
          },
