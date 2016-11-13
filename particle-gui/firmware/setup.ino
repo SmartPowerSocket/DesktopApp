@@ -54,9 +54,9 @@
 /*  WEBHOOK SETUP - END */
 
 /* INCLUDE LIBRARIES */
-#include "blynk/blynk.h"        // includes Blynk app library
+#include "blynk.h"        // includes Blynk app library
 #include <math.h>               // includes the math library
-#include "EmonLib/EmonLib.h"    // includes Energy Monitoring library (Emonlib)
+#include "EmonLib.h"    // includes Energy Monitoring library (Emonlib)
 
 /* SEMI_AUTOMATIC SYSTEM MODE FOR WORKING OFFLINE - START */
 SYSTEM_MODE(SEMI_AUTOMATIC)
