@@ -77,7 +77,36 @@ global.particleEnhancement.flashFirmware = function() {
 				'app.js',
 				'flash',
 				global.particleEnhancement.deviceName,
-				customFirmwarePath
+				customFirmwarePath,
+				// https://github.com/vshymanskyy/blynk-library-spark/issues/7
+				path.join(__dirname, 'firmware', 'blynk/blynk.cpp'),
+				path.join(__dirname, 'firmware', 'blynk/blynk.h'),
+				path.join(__dirname, 'firmware', 'blynk/BlynkApi.h'),
+				path.join(__dirname, 'firmware', 'blynk/BlynkApiParticle.h'),
+				path.join(__dirname, 'firmware', 'blynk/BlynkConfig.h'),
+				path.join(__dirname, 'firmware', 'blynk/BlynkDateTime.h'),
+				path.join(__dirname, 'firmware', 'blynk/BlynkDebug.cpp'),
+				path.join(__dirname, 'firmware', 'blynk/BlynkDebug.h'),
+				path.join(__dirname, 'firmware', 'blynk/BlynkDetectDevice.h'),
+				path.join(__dirname, 'firmware', 'blynk/BlynkHandlers.cpp'),
+				path.join(__dirname, 'firmware', 'blynk/BlynkHandlers.h'),
+				path.join(__dirname, 'firmware', 'blynk/BlynkParam.h'),
+				path.join(__dirname, 'firmware', 'blynk/BlynkParticle.h'),
+				path.join(__dirname, 'firmware', 'blynk/BlynkProtocol.h'),
+				path.join(__dirname, 'firmware', 'blynk/BlynkProtocolDefs.h'),
+				path.join(__dirname, 'firmware', 'blynk/BlynkSimpleParticle.h'),
+				path.join(__dirname, 'firmware', 'blynk/BlynkUtility.h'),
+				path.join(__dirname, 'firmware', 'blynk/BlynkWidgets.h'),
+				path.join(__dirname, 'firmware', 'blynk/WidgetBridge.h'),
+				path.join(__dirname, 'firmware', 'blynk/WidgetLCD.h'),
+				path.join(__dirname, 'firmware', 'blynk/WidgetLED.h'),
+				path.join(__dirname, 'firmware', 'blynk/WidgetGPS.h'),
+				path.join(__dirname, 'firmware', 'blynk/WidgetTable.h'),
+				path.join(__dirname, 'firmware', 'blynk/WidgetTerminal.h'),
+				path.join(__dirname, 'firmware', 'blynk/WidgetTimeInput.h'),
+				// https://github.com/cinezaster/emonlib
+				path.join(__dirname, 'firmware', 'EmonLib/EmonLib.cpp'),
+				path.join(__dirname, 'firmware', 'EmonLib/EmonLib.h')
 			], false);
 };
 
