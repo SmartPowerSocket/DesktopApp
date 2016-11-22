@@ -50,6 +50,20 @@
          },
          "mydevices": true
      }
+
+     {
+         "event": "changeSocketStatus",
+         "url": "http://api.smartpowersocket.xyz/changeSocketStatus",
+         "requestType": "POST",
+         "headers": {
+             "Content-Type": "application/json"
+         },
+         "json": {
+             "socketNum": "{{socketNum}}",
+             "apiKey": "{{apiKey}}"
+         },
+         "mydevices": true
+     }
 */
 /*  WEBHOOK SETUP - END */
 
@@ -108,8 +122,9 @@ void setup() {
     Serial.begin(9600);
 
     // Subscribe to the webhook response event
-    Particle.subscribe("hook-response/sendSocketInformation", photonRequestReturn , MY_DEVICES);
-    Particle.subscribe("hook-response/getServerInformation", serverRequestReturn , MY_DEVICES);
+    Particle.subscribe("hook-response/sendSocketInformation", sendSocketInformationReturn , MY_DEVICES);
+    Particle.subscribe("hook-response/getServerInformation", getServerInformationReturn , MY_DEVICES);
+    Particle.subscribe("hook-response/changeSocketStatus", changeSocketStatusReturn , MY_DEVICES);
 
     /* VOLTAGE SENSOR PIN */
     pinMode(voltage_pin, INPUT);     // Input Pin for the voltage sensor
@@ -283,9 +298,9 @@ void loop() {
 //############################
 
 /* CALLBACKS FOR BOTH PHOTON REQUESTS (SEND DATA, GET DATA)  - START  */
-void photonRequestReturn(const char *event, const char *data) { }
+void sendSocketInformationReturn(const char *event, const char *data) { }
 
-void serverRequestReturn(const char *event, const char *data)
+void getServerInformationReturn(const char *event, const char *data)
 {
 
     if (data) {
@@ -308,6 +323,25 @@ void serverRequestReturn(const char *event, const char *data)
         } else {
             statuses[0] = String("Inactive");
             statuses[1] = String("Inactive");
+        }
+    }
+}
+
+void changeSocketStatusReturn(const char *event, const char *data)
+{
+    if (data) {
+        if (strstr(data, "Socket1") != NULL) {
+            if (strstr(data, "Active") != NULL) {
+                statuses[0] = String("Active");
+            } else if (strstr(data, "Inactive") != NULL) {
+                statuses[0] = String("Inactive");
+            }
+        } else if (strstr(data, "Socket2") != NULL) {
+            if (strstr(data, "Active") != NULL) {
+                statuses[1] = String("Active");
+            } else if (strstr(data, "Inactive") != NULL) {
+                statuses[1] = String("Inactive");
+            }
         }
     }
 }
@@ -390,7 +424,14 @@ void toggle_relay1()
     /* Function to toggle_relay1 when the interruption from the falling edge signal from pushbutton1 happens */
     if(digitalRead(pushbutton1) == LOW && digitalRead(pushbutton2) == HIGH){
         state_relay1 = !state_relay1;
-        digitalWrite(relay1, state_relay1);       //Writes the state_relay1 to relay 1
+        digitalWrite(relay1, state_relay1);  //Writes the state_relay1 to relay 1
+
+        // Send auth data
+        String jsonChangeSocketStatus = String(
+          "{ \"apiKey\": \"" + String("{{{apiKey}}}") + "\"" +
+           ",\"socketNum\": \"" + String(1) +  "\"}" );
+
+        Particle.publish("changeSocketStatus", jsonChangeSocketStatus, PRIVATE);
     }
 }
 
@@ -400,7 +441,14 @@ void toggle_relay2()
     /* Function to toggle_relay2 when the interruption from the falling edge signal from pushbutton2 happens */
     if(digitalRead(pushbutton2) == LOW && digitalRead(pushbutton1) == HIGH){
         state_relay2 = !state_relay2;
-        digitalWrite(relay2, state_relay2);       //Writes the state_relay2 to relay 2
+        digitalWrite(relay2, state_relay2);     //Writes the state_relay2 to relay 2
+        
+        // Send auth data
+        String jsonChangeSocketStatus = String(
+          "{ \"apiKey\": \"" + String("{{{apiKey}}}") + "\"" +
+           ",\"socketNum\": \"" + String(2) +  "\"}" );
+
+        Particle.publish("changeSocketStatus", jsonChangeSocketStatus, PRIVATE);
     }
 }
 
