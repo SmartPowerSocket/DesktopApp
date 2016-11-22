@@ -238,8 +238,8 @@ void loop() {
     if (statuses[0] == String("Active")) {
         // Send reading data
         String jsonSendSocketInformation = String(
-            "{ \"current\":" + String(random(300)) + // String(Irms0)
-             ",\"tension\":" + String(random(300)) + // String(voltage)
+            "{ \"current\":" + String(Irms0) + // random(300)
+             ",\"tension\":" + String(voltage) + // random(300)
              ",\"socketNum\":" + String(1) +
              ",\"apiKey\": \"" + String("{{{apiKey}}}") + "\"}");
 
@@ -247,14 +247,14 @@ void loop() {
         Particle.publish("sendSocketInformation", jsonSendSocketInformation, PRIVATE);
     }
 
-    // Wait 2 seconds
-    delay(2000);
+    // Wait 4 seconds
+    delay(4000);
 
     if (statuses[1] == String("Active")) {
         // Send reading data
         String jsonSendSocketInformation = String(
-            "{ \"current\":" + String(random(300)) + // String(Irms1)
-             ",\"tension\":" + String(random(300)) + // String(voltage)
+            "{ \"current\":" + String(Irms1) + // random(300)
+             ",\"tension\":" + String(voltage) + // random(300)
              ",\"socketNum\":" + String(2) +
              ",\"apiKey\": \"" + String("{{{apiKey}}}") + "\"}");
 
@@ -262,8 +262,8 @@ void loop() {
         Particle.publish("sendSocketInformation", jsonSendSocketInformation, PRIVATE);
     }
 
-    // Wait 2 seconds
-    delay(2000);
+    // Wait 4 seconds
+    delay(4000);
 
     if (statuses[0] != String("Deleted")) {
         // Send auth data
@@ -274,8 +274,8 @@ void loop() {
         Particle.publish("getServerInformation", jsonGetServerInformation, PRIVATE);
     }
 
-    // Wait 2 seconds
-    delay(2000);
+    // Wait 4 seconds
+    delay(4000);
 
     if (statuses[1] != String("Deleted")) {
         // Send auth data
@@ -287,8 +287,8 @@ void loop() {
 
     }
 
-    // Wait 2 seconds
-    delay(2000);
+    // Wait 4 seconds
+    delay(4000);
 
 /* SEND AND GET INFORMATION FROM SERVER - END */
 }
