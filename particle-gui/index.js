@@ -23,7 +23,7 @@ global.particleEnhancement = {
 	manualSetup: false,
 	photonDeviceId: null,
 	photonApiKey: null,
-	apiUrl: "http://d585e5a8.ngrok.io",
+	apiUrl: "http://1eb24410.ngrok.io",
 	deviceName: crypto.randomBytes(64).toString('hex')
 };
 

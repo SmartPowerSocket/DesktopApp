@@ -108,8 +108,8 @@ void setup() {
     Serial.begin(9600);
 
     // Subscribe to the webhook response event
-    Particle.subscribe("sendSocketInformation", photonRequestReturn , MY_DEVICES);
-    Particle.subscribe("getServerInformation", serverRequestReturn , MY_DEVICES);
+    Particle.subscribe("hook-response/sendSocketInformation", photonRequestReturn , MY_DEVICES);
+    Particle.subscribe("hook-response/getServerInformation", serverRequestReturn , MY_DEVICES);
 
     /* VOLTAGE SENSOR PIN */
     pinMode(voltage_pin, INPUT);     // Input Pin for the voltage sensor
@@ -189,81 +189,91 @@ void loop() {
     Serial.print("Potencia (W): ");
     Serial.print(Irms0*voltage);	       // Apparent power
     Serial.print("      ");
+    Serial.print("Socket 1 Status: ");
+    Serial.print(statuses[0]);         // Socket 1 status
+    Serial.print("      ");
+    Serial.print("Socket 2 Status: ");
+    Serial.print(statuses[1]);         // Socket 2 status
+    Serial.print("      ");
     Serial.println("");
 /* SERIAL PRINTS - END */
 
 /* RETRY CONNECTION WITH Wi-Fi - START */
     if (!retryRunning &&
-        !Particle.connected() &&
-        statuses[0] != "Deleted" &&
-        statuses[1] != "Deleted") {
-        // if we have not already scheduled a retry and are not connected
-        Serial.println("schedule");
-        stopTimer.start();         // set timeout for auto-retry by system
-        retryRunning = true;
-        retryTimer.start();        // schedula a retry
-    } else if (statuses[0] == "Deleted" &&
-               statuses[1] == "Deleted") {
-         Particle.disconnect();
-    }
-    delay(500);
+         !Particle.connected() &&
+         strstr(statuses[0], "Deleted") == NULL &&
+         strstr(statuses[1], "Deleted") == NULL) {
+         // if we have not already scheduled a retry and are not connected
+         Serial.println("schedule");
+         stopTimer.start();         // set timeout for auto-retry by system
+
+          retryRunning = true;
+          retryTimer.start();        // schedula a retry
+     } else if (strstr(statuses[0], "Deleted") != NULL &&
+                strstr(statuses[1], "Deleted") != NULL) {
+          Particle.disconnect();
+     }
+    // Wait 5 seconds
+    delay(5000);
 /* RETRY CONNECTION WITH Wi-Fi - END */
 
 
 /* SEND AND GET INFORMATION FROM SERVER - START */
-    if (statuses[0] == "Active") {
+    if (statuses[0] == String("Active")) {
         // Send reading data
         String jsonSendSocketInformation = String(
-            "{ \"current\":" + String(Irms0) +
-             ",\"tension\":" + String(voltage) +
+            "{ \"current\":" + String(random(300)) + // String(Irms0)
+             ",\"tension\":" + String(random(300)) + // String(voltage)
              ",\"socketNum\":" + String(1) +
              ",\"apiKey\": \"" + String("{{{apiKey}}}") + "\"}");
 
         // Trigger the webhook
         Particle.publish("sendSocketInformation", jsonSendSocketInformation, PRIVATE);
-
-        // Wait 5 seconds
-        delay(5000);
     }
 
-    if (statuses[1] == "Active") {
+    // Wait 5 seconds
+    delay(5000);
+
+    if (statuses[1] == String("Active")) {
         // Send reading data
         String jsonSendSocketInformation = String(
-            "{ \"current\":" + String(Irms1) +
-             ",\"tension\":" + String(voltage) +
+            "{ \"current\":" + String(random(300)) + // String(Irms1)
+             ",\"tension\":" + String(random(300)) + // String(voltage)
              ",\"socketNum\":" + String(2) +
              ",\"apiKey\": \"" + String("{{{apiKey}}}") + "\"}");
 
         // Trigger the webhook
         Particle.publish("sendSocketInformation", jsonSendSocketInformation, PRIVATE);
-
-        // Wait 5 seconds
-        delay(5000);
     }
 
-    if (statuses[0] != "Deleted") {
+    // Wait 5 seconds
+    delay(5000);
+
+    if (statuses[0] != String("Deleted")) {
         // Send auth data
         String jsonGetServerInformation = String(
-          "{ \"apiKey\": \"" + String("{{{apiKey}}}") +
-           ",\"socketNum\":" + String(1) +  "\"}" );
+          "{ \"apiKey\": \"" + String("{{{apiKey}}}") + "\"" +
+           ",\"socketNum\": \"" + String(1) +  "\"}" );
+
+        Particle.publish("getServerInformation", jsonGetServerInformation, PRIVATE);
+    }
+
+    // Wait 5 seconds
+    delay(5000);
+
+    if (statuses[1] != String("Deleted")) {
+        // Send auth data
+        String jsonGetServerInformation = String(
+          "{ \"apiKey\": \"" + String("{{{apiKey}}}") + "\"" +
+           ",\"socketNum\": \"" + String(2) +  "\"}" );
 
         Particle.publish("getServerInformation", jsonGetServerInformation, PRIVATE);
 
-        // Wait 5 seconds
-        delay(5000);
     }
 
-    if (statuses[1] != "Deleted") {
-        // Send auth data
-        String jsonGetServerInformation = String(
-          "{ \"apiKey\": \"" + String("{{{apiKey}}}") +
-           ",\"socketNum\":" + String(2) +  "\"}" );
+    // Wait 5 seconds
+    delay(5000);
 
-        Particle.publish("getServerInformation", jsonGetServerInformation, PRIVATE);
-
-        // Wait 5 seconds
-        delay(5000);
-    }
 /* SEND AND GET INFORMATION FROM SERVER - END */
 }
 
@@ -276,23 +286,27 @@ void photonRequestReturn(const char *event, const char *data) { }
 
 void serverRequestReturn(const char *event, const char *data)
 {
+
     if (data) {
         if (strstr(data, "Socket1") != NULL) {
-          if (strstr(data, "Active") != NULL) {
-              statuses[0] = "Active";
-          } else if (strstr(data, "Inactive") != NULL) {
-              statuses[0] = "Inactive";
-          } else if (strstr(data, "Deleted") != NULL) {
-              statuses[0] = "Deleted";
-          }
+            if (strstr(data, "Active") != NULL) {
+                statuses[0] = String("Active");
+            } else if (strstr(data, "Inactive") != NULL) {
+                statuses[0] = String("Inactive");
+            } else if (strstr(data, "Deleted") != NULL) {
+                statuses[0] = String("Deleted");
+            }
         } else if (strstr(data, "Socket2") != NULL) {
-          if (strstr(data, "Active") != NULL) {
-              statuses[1] = "Active";
-          } else if (strstr(data, "Inactive") != NULL) {
-              statuses[1] = "Inactive";
-          } else if (strstr(data, "Deleted") != NULL) {
-              statuses[1] = "Deleted";
-          }
+            if (strstr(data, "Active") != NULL) {
+                statuses[1] = String("Active");
+            } else if (strstr(data, "Inactive") != NULL) {
+                statuses[1] = String("Inactive");
+            } else if (strstr(data, "Deleted") != NULL) {
+                statuses[1] = String("Deleted");
+            }
+        } else {
+            statuses[0] = String("Deleted");
+            statuses[1] = String("Deleted");
         }
     }
 }

@@ -19,7 +19,7 @@
 
 6) Run: ```npm install```
 
-7) Run: ```npm rebuild --runtime=electron --target=1.4.6 --disturl=https://atom.io/download/atom-shell --build-from-source```. Check electron package version by doing: ```npm ls electron```
+7) Run: ```npm rebuild --runtime=electron --target=1.4.7 --disturl=https://atom.io/download/atom-shell --build-from-source```. Check electron package version by doing: ```npm ls electron```
 
 8) Run the app in dev mode: ```npm run dev```
 
@@ -28,3 +28,5 @@
 1) For all platforms do: ```npm run package-all```
 
 2) For your current platforms do: ```npm run package```
+
+3) Run after packaging: ```npm rebuild --runtime=electron --target=1.4.6 --disturl=https://atom.io/download/atom-shell --build-from-source```. Check electron package version by doing: ```npm ls electron```
