@@ -229,8 +229,8 @@ void loop() {
                 statuses[1] == String("Deleted")) {
           Particle.disconnect();
      }
-    // Wait 5 seconds
-    delay(5000);
+    // Wait 2 seconds
+    delay(2000);
 /* RETRY CONNECTION WITH Wi-Fi - END */
 
 
@@ -247,8 +247,8 @@ void loop() {
         Particle.publish("sendSocketInformation", jsonSendSocketInformation, PRIVATE);
     }
 
-    // Wait 5 seconds
-    delay(5000);
+    // Wait 2 seconds
+    delay(2000);
 
     if (statuses[1] == String("Active")) {
         // Send reading data
@@ -262,8 +262,8 @@ void loop() {
         Particle.publish("sendSocketInformation", jsonSendSocketInformation, PRIVATE);
     }
 
-    // Wait 5 seconds
-    delay(5000);
+    // Wait 2 seconds
+    delay(2000);
 
     if (statuses[0] != String("Deleted")) {
         // Send auth data
@@ -274,8 +274,8 @@ void loop() {
         Particle.publish("getServerInformation", jsonGetServerInformation, PRIVATE);
     }
 
-    // Wait 5 seconds
-    delay(5000);
+    // Wait 2 seconds
+    delay(2000);
 
     if (statuses[1] != String("Deleted")) {
         // Send auth data
@@ -287,8 +287,8 @@ void loop() {
 
     }
 
-    // Wait 5 seconds
-    delay(5000);
+    // Wait 2 seconds
+    delay(2000);
 
 /* SEND AND GET INFORMATION FROM SERVER - END */
 }
