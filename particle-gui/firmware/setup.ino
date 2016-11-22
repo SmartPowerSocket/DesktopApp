@@ -201,16 +201,17 @@ void loop() {
 /* RETRY CONNECTION WITH Wi-Fi - START */
     if (!retryRunning &&
          !Particle.connected() &&
-         strstr(statuses[0], "Deleted") == NULL &&
-         strstr(statuses[1], "Deleted") == NULL) {
+         (statuses[0] != String("Deleted") ||
+          statuses[1] != String("Deleted"))
+       ) {
          // if we have not already scheduled a retry and are not connected
          Serial.println("schedule");
          stopTimer.start();         // set timeout for auto-retry by system
 
           retryRunning = true;
           retryTimer.start();        // schedula a retry
-     } else if (strstr(statuses[0], "Deleted") != NULL &&
-                strstr(statuses[1], "Deleted") != NULL) {
+     } else if (statuses[0] == String("Deleted") &&
+                statuses[1] == String("Deleted")) {
           Particle.disconnect();
      }
     // Wait 5 seconds
@@ -305,8 +306,8 @@ void serverRequestReturn(const char *event, const char *data)
                 statuses[1] = String("Deleted");
             }
         } else {
-            statuses[0] = String("Deleted");
-            statuses[1] = String("Deleted");
+            statuses[0] = String("Inactive");
+            statuses[1] = String("Inactive");
         }
     }
 }
