@@ -209,7 +209,7 @@ void loop() {
     Serial.print("Corrente1 (A): ");
     Serial.print(Irms0);                    // Irms0
     Serial.print("      ");
-     Serial.print("Corrente2 (A): ");
+    Serial.print("Corrente2 (A): ");
     Serial.print(Irms1);                    // Irms1
     Serial.print("      ");
     Serial.print("Potencia1 (W): ");
@@ -333,19 +333,27 @@ void getServerInformationReturn(const char *event, const char *data)
         if (strstr(data, "Socket1") != NULL) {
             if (strstr(data, "Active") != NULL) {
                 statuses[0] = String("Active");
+                state_relay1 = LOW;
             } else if (strstr(data, "Inactive") != NULL) {
                 statuses[0] = String("Inactive");
+                state_relay1 = HIGH;
             } else if (strstr(data, "Deleted") != NULL) {
                 statuses[0] = String("Deleted");
+                state_relay1 = HIGH;
             }
+            digitalWrite(relay1, state_relay1);  //Writes the state_relay1 to relay 1
         } else if (strstr(data, "Socket2") != NULL) {
             if (strstr(data, "Active") != NULL) {
                 statuses[1] = String("Active");
+                state_relay2 = LOW;
             } else if (strstr(data, "Inactive") != NULL) {
                 statuses[1] = String("Inactive");
+                state_relay2 = HIGH;
             } else if (strstr(data, "Deleted") != NULL) {
                 statuses[1] = String("Deleted");
+                state_relay2 = HIGH;
             }
+            digitalWrite(relay2, state_relay2);     //Writes the state_relay2 to relay 2
         } else {
             statuses[0] = String("Inactive");
             statuses[1] = String("Inactive");
