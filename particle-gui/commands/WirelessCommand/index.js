@@ -954,7 +954,7 @@ WirelessCommand.prototype.__configure = function __configure(ssid, cb) {
 
 			api.listDevices(checkDevices);
 
-		}, 10000); // 2000
+		}, 5000); // 2000
 
 	};
 	function checkDevices(err, dat) {

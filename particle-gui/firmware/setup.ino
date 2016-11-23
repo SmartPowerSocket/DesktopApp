@@ -281,9 +281,9 @@ void loop() {
         delay(4000);
     }
 
-    if (statuses[0] != String("Deleted") && socket1Counter == 0) {
+    if (statuses[0] != String("Deleted") && socket1Counter <= 0) {
         // Add loops to wait till next request
-        socket1Counter = 3;
+        socket1Counter = 2;
 
         // Send auth data
         String jsonGetServerInformation = String(
@@ -298,9 +298,9 @@ void loop() {
         socket1Counter = socket1Counter - 1;
     }
 
-    if (statuses[1] != String("Deleted") && socket2Counter == 0) {
+    if (statuses[1] != String("Deleted") && socket2Counter <= 0) {
         // Add loops to wait till next request
-        socket2Counter = 3;
+        socket2Counter = 2;
 
         // Send auth data
         String jsonGetServerInformation = String(
@@ -354,7 +354,7 @@ void getServerInformationReturn(const char *event, const char *data)
                 state_relay2 = HIGH;
             }
             digitalWrite(relay2, state_relay2);     //Writes the state_relay2 to relay 2
-        } else {
+        } else if (strstr(data, "Authentication failed!") != NULL) {
             statuses[0] = String("Inactive");
             statuses[1] = String("Inactive");
         }
