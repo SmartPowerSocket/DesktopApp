@@ -920,10 +920,11 @@ WirelessCommand.prototype.__configure = function __configure(ssid, cb) {
 		}], manualPrompt);
 		*/
 
-		global.particleEnhancement.needToSetNetworkBack = true;
 		global.particleEnhancement.setNetworkBackToPrevious = function() {
 			manualPrompt();
 		};
+		global.particleEnhancement.needToSetNetworkBack = true;
+		self.newSpin('Waiting to reconnect Wi-Fi network...').start();
 	}
 
 	function manualPrompt() {

@@ -83,6 +83,10 @@ bool   retryRunning = false;
 Timer retryTimer(msRetryDelay, retryConnect);  // timer to retry connecting
 Timer stopTimer(msRetryTime, stopConnect);     // timer to stop a long running try
 
+/* VARIABLES LOOP CONTROL SERVER REQUESTS */
+int socket1Counter = 0;
+int socket2Counter = 0;
+
 /* SEMI_AUTOMATIC SYSTEM MODE FOR WORKING OFFLINE - END */
 
 /* CREATE INSTANCES OF THE EMONLIB LIBRARY */
@@ -199,11 +203,17 @@ void loop() {
     Serial.print(voltage);              // Voltage
     Serial.print("      ");
     Serial.print("Corrente1 (A): ");
-    Serial.print(Irms0);		            // Irms
+    Serial.print(Irms0);                    // Irms0
     Serial.print("      ");
-    Serial.print("Potencia (W): ");
-    Serial.print(Irms0*voltage);	       // Apparent power
+     Serial.print("Corrente2 (A): ");
+    Serial.print(Irms1);                    // Irms1
     Serial.print("      ");
+    Serial.print("Potencia1 (W): ");
+    Serial.print(Irms0*voltage);           // Apparent power 1
+    Serial.print("      ");
+    Serial.print("Potencia2 (W): ");
+    Serial.print(Irms1*voltage);           // Apparent power 2
+    Serial.print("      "); 
     Serial.print("Socket 1 Status: ");
     Serial.print(statuses[0]);         // Socket 1 status
     Serial.print("      ");
@@ -225,17 +235,19 @@ void loop() {
 
           retryRunning = true;
           retryTimer.start();        // schedula a retry
+
+           // Wait 2 seconds
+           delay(2000);
      } else if (statuses[0] == String("Deleted") &&
                 statuses[1] == String("Deleted")) {
           Particle.disconnect();
      }
-    // Wait 2 seconds
-    delay(2000);
+   
 /* RETRY CONNECTION WITH Wi-Fi - END */
 
 
 /* SEND AND GET INFORMATION FROM SERVER - START */
-    if (statuses[0] == String("Active")) {
+    if (statuses[0] == String("Active") && Irms0 > 0) {
         // Send reading data
         String jsonSendSocketInformation = String(
             "{ \"current\":" + String(Irms0) + // random(300)
@@ -245,12 +257,12 @@ void loop() {
 
         // Trigger the webhook
         Particle.publish("sendSocketInformation", jsonSendSocketInformation, PRIVATE);
+
+        // Wait 4 seconds
+        delay(4000);
     }
 
-    // Wait 4 seconds
-    delay(4000);
-
-    if (statuses[1] == String("Active")) {
+    if (statuses[1] == String("Active") && Irms1 > 0) {
         // Send reading data
         String jsonSendSocketInformation = String(
             "{ \"current\":" + String(Irms1) + // random(300)
@@ -260,24 +272,32 @@ void loop() {
 
         // Trigger the webhook
         Particle.publish("sendSocketInformation", jsonSendSocketInformation, PRIVATE);
+
+        // Wait 4 seconds
+        delay(4000);
     }
 
-    // Wait 4 seconds
-    delay(4000);
+    if (statuses[0] != String("Deleted") && socket1Counter == 0) {
+        // Add loops to wait till next request
+        socket1Counter = 3;
 
-    if (statuses[0] != String("Deleted")) {
         // Send auth data
         String jsonGetServerInformation = String(
           "{ \"apiKey\": \"" + String("{{{apiKey}}}") + "\"" +
            ",\"socketNum\": \"" + String(1) +  "\"}" );
 
         Particle.publish("getServerInformation", jsonGetServerInformation, PRIVATE);
+
+        // Wait 4 seconds
+        delay(4000);
+    } else {
+        socket1Counter = socket1Counter - 1;
     }
 
-    // Wait 4 seconds
-    delay(4000);
+    if (statuses[1] != String("Deleted") && socket2Counter == 0) {
+        // Add loops to wait till next request
+        socket2Counter = 3;
 
-    if (statuses[1] != String("Deleted")) {
         // Send auth data
         String jsonGetServerInformation = String(
           "{ \"apiKey\": \"" + String("{{{apiKey}}}") + "\"" +
@@ -285,10 +305,12 @@ void loop() {
 
         Particle.publish("getServerInformation", jsonGetServerInformation, PRIVATE);
 
-    }
+        // Wait 4 seconds
+        delay(4000);
 
-    // Wait 4 seconds
-    delay(4000);
+    } else {
+        socket2Counter = socket2Counter - 1;
+    }
 
 /* SEND AND GET INFORMATION FROM SERVER - END */
 }

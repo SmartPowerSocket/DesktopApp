@@ -70,7 +70,8 @@ class SetupWifi extends Component {
         timeoutIsSet = true;
         TimerMixin.setTimeout(
           () => {
-            if (!remote.getGlobal('particleEnhancement').photonNetworkList) {
+            if (!remote.getGlobal('particleEnhancement').photonNetworkList &&
+                 remote.getGlobal('particleEnhancement').stopPhotonWifiMonitoring) {
               TimerMixin.clearInterval(interval);
               remote.getGlobal('particleEnhancement').stopPhotonWifiMonitoring();
               remote.getGlobal('particleEnhancement').photonSetupFailed = 'Setup timeout,' +
