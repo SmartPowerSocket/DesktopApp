@@ -59,8 +59,8 @@
              "Content-Type": "application/json"
          },
          "json": {
-             "socketNum": "{{socketNum}}",
-             "apiKey": "{{apiKey}}"
+            "apiKey": "{{apiKey}}",
+            "socketNum": "{{socketNum}}"
          },
          "mydevices": true
      }
@@ -147,11 +147,14 @@ void setup() {
     /* SET RELAY PINS AND INTERRUPTIONS - START */
     pinMode(relay1, OUTPUT);                                  //setup of relay1 as output on Photon
     pinMode(pushbutton1, INPUT_PULLUP);                      //setup pushbutton1 as an input with the Pullup resistor enabled (nomally high or 3V3)
-    attachInterrupt(pushbutton1, toggle_relay1, FALLING);   //attach the interruption to toggle the state_relay1 and happen when the negative edge of the signal from pushbutton1
+    
+    // attachInterrupt(pushbutton1, toggle_relay1, FALLING);   //attach the interruption to toggle the state_relay1 and happen when the negative edge of the signal from pushbutton1
 
     pinMode(relay2, OUTPUT);                                 //setup of relay2 as output on Photon
     pinMode(pushbutton2, INPUT_PULLUP);                     //setup pushbutton2 as an input with the Pullup resistor enabled (nomally high or 3V3)
-    attachInterrupt(pushbutton2, toggle_relay2, FALLING);  //attach the interruption to toggle the state_relay2 and happen when the negative edge of the signal from pushbutton2
+    
+    // attachInterrupt(pushbutton2, toggle_relay2, FALLING);  //attach the interruption to toggle the state_relay2 and happen when the negative edge of the signal from pushbutton2
+
     /* SET RELAY PINS AND INTERRUPTIONS - END */
 
     /* TURN OFF WiFi IF NO LUCK CONNECTING - START */
@@ -205,7 +208,7 @@ void loop() {
     Serial.print("Corrente1 (A): ");
     Serial.print(Irms0);                    // Irms0
     Serial.print("      ");
-     Serial.print("Corrente2 (A): ");
+    Serial.print("Corrente2 (A): ");
     Serial.print(Irms1);                    // Irms1
     Serial.print("      ");
     Serial.print("Potencia1 (W): ");
@@ -247,6 +250,39 @@ void loop() {
 
 
 /* SEND AND GET INFORMATION FROM SERVER - START */
+    
+    if(digitalRead(pushbutton1) == LOW && digitalRead(pushbutton2) == HIGH){
+
+        state_relay1 = !state_relay1;
+        digitalWrite(relay1, state_relay1);  //Writes the state_relay1 to relay 1
+
+        // Send auth data
+        String jsonChangeSocketStatus = String(
+          "{ \"apiKey\": \"" + String("{{{apiKey}}}") + "\"" +
+           ",\"socketNum\": \"" + String(1) +  "\"}" );
+
+        Particle.publish("changeSocketStatus", jsonChangeSocketStatus, PRIVATE);
+
+        // Wait 4 seconds
+        delay(4000);
+    }
+
+    if(digitalRead(pushbutton2) == LOW && digitalRead(pushbutton1) == HIGH){
+
+        state_relay2 = !state_relay2;
+        digitalWrite(relay2, state_relay2); //Writes the state_relay2 to relay 2
+
+        // Send auth data
+        String jsonChangeSocketStatus = String(
+          "{ \"apiKey\": \"" + String("{{{apiKey}}}") + "\"" +
+           ",\"socketNum\": \"" + String(2) +  "\"}" );
+
+        Particle.publish("changeSocketStatus", jsonChangeSocketStatus, PRIVATE);
+
+        // Wait 4 seconds
+        delay(4000);
+    }
+
     if (statuses[0] == String("Active") && Irms0 > 0) {
         // Send reading data
         String jsonSendSocketInformation = String(
@@ -441,38 +477,25 @@ int get_ADC_value(int pin){
 
 
 /* TOGGLE RELAY FUNCTIONS - START */
-void toggle_relay1()
-{
-    /* Function to toggle_relay1 when the interruption from the falling edge signal from pushbutton1 happens */
-    if(digitalRead(pushbutton1) == LOW && digitalRead(pushbutton2) == HIGH){
-        state_relay1 = !state_relay1;
-        digitalWrite(relay1, state_relay1);  //Writes the state_relay1 to relay 1
 
-        // Send auth data
-        String jsonChangeSocketStatus = String(
-          "{ \"apiKey\": \"" + String("{{{apiKey}}}") + "\"" +
-           ",\"socketNum\": \"" + String(1) +  "\"}" );
-
-        Particle.publish("changeSocketStatus", jsonChangeSocketStatus, PRIVATE);
-    }
-}
+//void toggle_relay1()
+//{
+// /* Function to toggle_relay1 when the interruption from the falling edge signal from pushbutton1 happens */
+//    if(digitalRead(pushbutton1) == LOW && digitalRead(pushbutton2) == HIGH){
+//        state_relay1 = !state_relay1;
+//        digitalWrite(relay1, state_relay1);  //Writes the state_relay1 to relay 1
+//    }
+//}
 
 
-void toggle_relay2()
-{
-    /* Function to toggle_relay2 when the interruption from the falling edge signal from pushbutton2 happens */
-    if(digitalRead(pushbutton2) == LOW && digitalRead(pushbutton1) == HIGH){
-        state_relay2 = !state_relay2;
-        digitalWrite(relay2, state_relay2);     //Writes the state_relay2 to relay 2
-        
-        // Send auth data
-        String jsonChangeSocketStatus = String(
-          "{ \"apiKey\": \"" + String("{{{apiKey}}}") + "\"" +
-           ",\"socketNum\": \"" + String(2) +  "\"}" );
-
-        Particle.publish("changeSocketStatus", jsonChangeSocketStatus, PRIVATE);
-    }
-}
+//void toggle_relay2()
+//{
+// /* Function to toggle_relay2 when the interruption from the falling edge signal from pushbutton2 happens */
+//    if(digitalRead(pushbutton2) == LOW && digitalRead(pushbutton1) == HIGH){
+//        state_relay2 = !state_relay2;
+//        digitalWrite(relay2, state_relay2); //Writes the state_relay2 to relay 2
+//    }
+//}
 
 double get_Irms0_current(){
 
