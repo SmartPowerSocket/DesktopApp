@@ -949,11 +949,12 @@ WirelessCommand.prototype.__configure = function __configure(ssid, cb) {
 		self.stopSpin();
 		self.newSpin("Attempting to verify the Photon's connection to the cloud...").start();
 
+		/* Enhancement point */
 		setTimeout(function () {
 
 			api.listDevices(checkDevices);
 
-		}, 2000);
+		}, 10000); // 2000
 
 	};
 	function checkDevices(err, dat) {
