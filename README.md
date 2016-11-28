@@ -1,7 +1,7 @@
 # Smart Power Socket - Desktop app
 
 ## To run the app in dev mode:
-1) Install node 4.4.4: ```nvm install 4.4.4```
+1) Install node v6.9.1: ```nvm install 6.9.1```
 
 2) Update NPM to version 3: ```sudo npm install npm@latest -g```
 
@@ -29,4 +29,4 @@
 
 2) For your current platforms do: ```npm run package```
 
-3) Run after packaging: ```npm rebuild --runtime=electron --target=1.4.6 --disturl=https://atom.io/download/atom-shell --build-from-source```. Check electron package version by doing: ```npm ls electron```
+3) Run after packaging: ```npm rebuild --runtime=electron --target=1.4.8 --disturl=https://atom.io/download/atom-shell --build-from-source```. Check electron package version by doing: ```npm ls electron```
