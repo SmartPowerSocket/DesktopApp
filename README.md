@@ -1,5 +1,8 @@
 # Smart Power Socket - Desktop app
 
+## Reference
+This project was done as part of an undergrad thesis, for more details visit: https://docs.google.com/file/d/0B4CqM12akwGJQ2hrTlVPTWtFYkE/edit?filetype=msword
+
 ## To run the app in dev mode:
 1) Install node v6.9.1: ```nvm install 6.9.1```
 
